@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso de Audio Digital, Filtros y Delays</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --primary: #34495e;
+            --accent: #2980b9;
+            --border-color: #dcdde1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 800px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background-color: #e2e8f0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-category {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin: 0 0 12px 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 8px;
+        }
+
+        .card-content {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .card-content ul {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+
+        .card-content li {
+            margin-bottom: 6px;
+        }
+
+        .formula {
+            background-color: #f8f9fa;
+            border-left: 3px solid var(--accent);
+            padding: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Mesa de Examen: Procesamiento de Audio</h1>
+        <p>Seleccioná una categoría para filtrar las tarjetas de estudio y repasar los conceptos fundamentales para mañana.</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="filterCards('all')">Todos los Temas</button>
+        <button class="tab-btn" onclick="filterCards('audio')">Audio Digital</button>
+        <button class="tab-btn" onclick="filterCards('filtros')">Filtros</button>
+        <button class="tab-btn" onclick="filterCards('delays')">Delays</button>
+    </div>
+
+    <main class="cards-container" id="cardsContainer">
+        
+        <!-- AUDIO DIGITAL -->
+        <div class="card" data-category="audio">
+            <span class="card-category">Audio Digital</span>
+            <h2 class="card-title">Frecuencia de Muestreo</h2>
+            <div class="card-content">
+                <p>Representa la cantidad de muestras discretas tomadas de una señal analógica por segundo (medida en Hz). Determina la resolución en el eje del tiempo.</p>
+                <div class="formula">Eje afectado: Tiempo (Dominio de la Frecuencia)</div>
+            </div>
+        </div>
+
+        <div class="card" data-category="audio">
+            <span class="card-category">Audio Digital</span>
+            <h2 class="card-title">Teorema de Nyquist</h2>
+            <div class="card-content">
+                <p>Establece que para reconstruir perfectamente una señal continua, la tasa de muestreo debe ser estrictamente mayor al doble de la frecuencia máxima componente de dicha señal.</p>
+                <div class="formula">fs > 2 * fmax</div>
+            </div>
+        </div>
+
+        <div class="card" data-category="audio">
+            <span class="card-category">Audio Digital</span>
+            <h2 class="card-title">Aliasing y Filtro Anti-aliasing</h2>
+            <div class="card-content">
+                <p>El aliasing es la aparición de frecuencias falsas cuando se supera el límite de Nyquist. Para prevenirlo se coloca un filtro analógico de tipo pasa-bajos estricto antes de la conversión digital.</p>
+            </div>
+        </div>
+
+        <div class="card" data-category="audio">
+            <span class="card-category">Audio Digital</span>
+            <h2 class="card-title">Profundidad de Bits</h2>
+            <div class="card-content">
+                <p>Determina la precisión con la que se mide la amplitud de la señal de audio en cada muestra. Define el rango dinámico teórico disponible del sistema.</p>
+                <div class="formula">Rango Dinámico ≈ 6 dB * número de bits</div>
+                <ul>
+                    <li><strong>16 bits:</strong> ~96 dB de rango dinámico.</li>
+                    <li><strong>24 bits:</strong> ~144 dB de rango dinámico.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" data-category="audio">
+            <span class="card-category">Audio Digital</span>
+            <h2 class="card-title">Error de Cuantización y Dither</h2>
+            <div class="card-content">
+                <p>El redondeo al valor discreto más cercano genera ruido de cuantización. El <strong>Dither</strong> es un ruido de baja amplitud que se suma antes de la cuantización para convertir la distorsión armónica correlativa en un siseo estocástico lineal.</p>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="card" data-category="filtros">
+            <span class="card-category">Filtros</span>
+            <h2 class="card-title">Frecuencia de Corte (fc)</h2>
+            <div class="card-content">
+                <p>Es la frecuencia límite donde el filtro empieza a atenuar de manera efectiva la señal. Se define operacionalmente como el punto donde la potencia decae a la mitad.</p>
+                <div class="formula">Atenuación en fc = -3 dB</div>
+            </div>
+        </div>
+
+        <div class="card" data-category="filtros">
+            <span class="card-category">Filtros</span>
+            <h2 class="card-title">Pendiente (Slope) y Factor Q</h2>
+            <div class="card-content">
+                <ul>
+                    <li><strong>Pendiente:</strong> Rigidez de la atenuación más allá de fc. Medida en dB por octava (múltiplos de 6 dB/oct por polo).</li>
+                    <li><strong>Factor Q:</strong> Selectividad del filtro. En filtros de campana regula el ancho de banda; en filtros pasa-altos/bajos regula el pico de resonancia.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" data-category="filtros">
+            <span class="card-category">Filtros</span>
+            <h2 class="card-title">Filtros Estándar</h2>
+            <div class="card-content">
+                <ul>
+                    <li><strong>Low Pass:</strong> Corta agudos, pasan graves.</li>
+                    <li><strong>High Pass:</strong> Corta graves, pasan agudos.</li>
+                    <li><strong>Band Pass:</strong> Solo pasa una banda central.</li>
+                    <li><strong>Notch:</strong> Elimina de forma quirúrgica una frecuencia fija.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" data-category="filtros">
+            <span class="card-category">Filtros</span>
+            <h2 class="card-title">Arquitecturas: FIR vs IIR</h2>
+            <div class="card-content">
+                <ul>
+                    <li><strong>FIR (Respuesta Finita al Impulso):</strong> Sin feedback. Permite fase lineal (sin desfase temporal entre frecuencias). Consumo de CPU y latencia elevados.</li>
+                    <li><strong>IIR (Respuesta Infinita al Impulso):</strong> Con feedback. Eficientes, baja latencia, emulan hardware analógico, introducen distorsión de fase.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- DELAYS -->
+        <div class="card" data-category="delays">
+            <span class="card-category">Delays</span>
+            <h2 class="card-title">Mecanismo del Delay Digital</h2>
+            <div class="card-content">
+                <p>Almacena la señal entrante en un búfer circular de memoria RAM por una cantidad determinada de muestras (N) antes de enviarla a la salida.</p>
+                <div class="formula">Tiempo de retraso (t) = N / fs</div>
+            </div>
+        </div>
+
+        <div class="card" data-category="delays">
+            <span class="card-category">Delays</span>
+            <h2 class="card-title">Parámetros Fundamentales</h2>
+            <div class="card-content">
+                <ul>
+                    <li><strong>Delay Time:</strong> Intervalo temporal de separación.</li>
+                    <li><strong>Feedback:</strong> Porcentaje de señal de salida reintroducida al inicio. Modula la cantidad de repeticiones de la señal.</li>
+                    <li><strong>Mix:</strong> Balance relativo entre señal limpia (dry) y procesada (wet).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" data-category="delays">
+            <span class="card-category">Delays</span>
+            <h2 class="card-title">Filtro de Peine (Comb Filter)</h2>
+            <div class="card-content">
+                <p>Fenómeno acústico y matemático que ocurre al sumar una señal consigo misma retrasada un tiempo muy corto (0-15 ms). Produce picos y valles de cancelación armónica en el espectro.</p>
+            </div>
+        </div>
+
+        <div class="card" data-category="delays">
+            <span class="card-category">Delays</span>
+            <h2 class="card-title">Efectos por Tiempos de Retraso</h2>
+            <div class="card-content">
+                <ul>
+                    <li><strong>0 - 15 ms:</strong> Cancelaciones de fase. Modulado genera <em>Flanger</em>.</li>
+                    <li><strong>15 - 35 ms:</strong> Psicoacústicamente se percibe como duplicación. Modulado genera <em>Chorus</em>.</li>
+                    <li><strong>> 40 ms:</strong> Percepción clara de eventos separados en el tiempo (<em>Eco / Delay espacial</em>).</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function filterCards(category) {
+            // Actualizar estado de los botones
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filtrar las tarjetas
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
