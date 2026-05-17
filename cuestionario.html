@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Examen: Verdadero o Falso - UNQ</title>
+    <title>Cuestionario Básico: Cimientos de Audio</title>
     <style>
         :root {
             --bg-main: #0b0f19;
@@ -42,14 +42,13 @@
             border: 2px solid var(--border);
             border-radius: 16px;
             width: 100%;
-            max-width: 750px;
+            max-width: 700px;
             padding: 40px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
         }
 
-        /* Indicador estético superior tipo VST */
         .quiz-window::before {
             content: '';
             position: absolute;
@@ -57,7 +56,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--cyan), var(--emerald), var(--amber));
+            background: linear-gradient(90deg, var(--cyan), var(--emerald));
         }
 
         header {
@@ -66,15 +65,14 @@
         }
 
         header h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
             color: #ffffff;
             margin-bottom: 5px;
         }
 
         header h1 span {
-            color: var(--cyan);
+            color: var(--emerald);
         }
 
         header p {
@@ -96,7 +94,6 @@
             background-color: rgba(6, 182, 212, 0.1);
             padding: 4px 12px;
             border-radius: 20px;
-            border: 1px solid rgba(6, 182, 212, 0.2);
         }
 
         .score-live {
@@ -117,11 +114,11 @@
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, var(--cyan), var(--emerald));
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.3s ease;
         }
 
         .question-wrapper {
-            min-height: 140px;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -129,9 +126,9 @@
         }
 
         .question-text {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            text-align: justify;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            text-align: center;
             font-weight: 500;
             color: #f1f5f9;
         }
@@ -145,7 +142,7 @@
         .btn-choice {
             flex: 1;
             border: none;
-            padding: 18px;
+            padding: 16px;
             font-size: 1.1rem;
             font-weight: 700;
             border-radius: 10px;
@@ -153,44 +150,27 @@
             transition: all 0.2s ease;
             color: #020617;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
-        .btn-true {
-            background-color: var(--emerald);
-        }
-        .btn-true:hover:not(:disabled) {
-            background-color: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-        }
+        .btn-true { background-color: var(--emerald); }
+        .btn-true:hover:not(:disabled) { background-color: #059669; transform: translateY(-2px); }
 
-        .btn-false {
-            background-color: var(--rose);
-        }
-        .btn-false:hover:not(:disabled) {
-            background-color: #e11d48;
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
-        }
+        .btn-false { background-color: var(--rose); }
+        .btn-false:hover:not(:disabled) { background-color: #e11d48; transform: translateY(-2px); }
 
         .btn-choice:disabled {
-            opacity: 0.25;
+            opacity: 0.2;
             cursor: not-allowed;
             transform: none !important;
-            box-shadow: none !important;
         }
 
         .feedback-panel {
             display: none;
             border-radius: 10px;
-            padding: 20px;
+            padding: 18px;
             margin-bottom: 25px;
             border: 1px solid transparent;
-            line-height: 1.5;
             font-size: 0.95rem;
-            animation: fadeIn 0.3s ease;
         }
 
         .feedback-panel.correct {
@@ -210,7 +190,6 @@
         .feedback-title {
             font-weight: 700;
             margin-bottom: 5px;
-            font-size: 1.05rem;
         }
 
         .btn-next {
@@ -224,74 +203,43 @@
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
-        .btn-next:hover {
-            background-color: #334155;
-        }
+        .btn-next:hover { background-color: #334155; }
 
-        /* Contenedor de fin de juego */
         .summary-layout {
             display: none;
             text-align: center;
-            padding: 20px 0;
-            animation: fadeIn 0.4s ease;
         }
 
         .summary-layout h2 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--amber);
             margin-bottom: 15px;
         }
 
         .score-badge {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 800;
             color: #ffffff;
             margin-bottom: 20px;
             background: rgba(255, 255, 255, 0.03);
             display: inline-block;
-            padding: 10px 40px;
+            padding: 10px 35px;
             border-radius: 12px;
             border: 1px solid var(--border);
-        }
-
-        .evaluation-text {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            color: #cbd5e1;
-            margin-bottom: 35px;
-            max-width: 550px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .btn-reset {
             background-color: var(--cyan);
             color: #000;
             border: none;
-            padding: 15px 30px;
+            padding: 14px 28px;
             font-size: 1rem;
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        .btn-reset:hover {
-            background-color: #22d3ee;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 600px) {
-            .quiz-window { padding: 20px; }
-            .actions-layout { flex-direction: column; gap: 10px; }
-            .question-text { font-size: 1.1rem; }
-        }
+        .btn-reset:hover { background-color: #22d3ee; }
     </style>
 </head>
 <body>
@@ -300,8 +248,8 @@
         
         <div id="game-stage">
             <header>
-                <h1>Simulador <span>UNQ</span></h1>
-                <p>Procesamiento de Sonido Digital — Cuestionario Aleatorio de Aprendizaje</p>
+                <h1>Repaso <span>Fácil</span></h1>
+                <p>Conceptos Básicos de Audio y Acústica</p>
             </header>
 
             <div class="meta-panel">
@@ -314,266 +262,195 @@
             </div>
 
             <div class="question-wrapper">
-                <p id="ui-question-text" class="question-text">Cargando reactivos del sistema...</p>
+                <p id="ui-question-text" class="question-text">Cargando preguntas básicas...</p>
             </div>
 
             <div class="actions-layout">
-                <button class="btn-choice btn-true" onclick="evaluateUserAnswer(true)">Verdadero</button>
-                <button class="btn-choice btn-false" onclick="evaluateUserAnswer(false)">Falso</button>
+                <button class="btn-choice btn-true" onclick="evaluateAnswer(true)">Verdadero</button>
+                <button class="btn-choice btn-false" onclick="evaluateAnswer(false)">Falso</button>
             </div>
 
             <div id="ui-feedback-box" class="feedback-panel">
-                <div id="ui-feedback-title" class="feedback-title">Correcto</div>
-                <div id="ui-feedback-desc">Justificación teórica técnica.</div>
+                <div id="ui-feedback-title" class="feedback-title">Resultado</div>
+                <div id="ui-feedback-desc">Explicación.</div>
             </div>
 
-            <button id="ui-next-btn" class="btn-next" onclick="advanceNextQuestion()">Siguiente Pregunta →</button>
+            <button id="ui-next-btn" class="btn-next" onclick="nextQuestion()">Siguiente Pregunta →</button>
         </div>
 
         <div id="results-stage" class="summary-layout">
-            <h2>Evaluación Finalizada</h2>
-            <p style="color: var(--text-muted); margin-bottom: 15px;">Tu rendimiento obtenido fue de:</p>
+            <h2>¡Cuestionario Completado!</h2>
+            <p style="color: var(--text-muted); margin-bottom: 15px;">Tu puntaje fue de:</p>
             <div id="ui-final-score" class="score-badge">0 / 10</div>
-            <p id="ui-final-comment" class="evaluation-text">Comentario analítico del resultado.</p>
-            <button class="btn-reset" onclick="initiateQuizEngine()">Generar Nuevo Test Aleatorio</button>
+            <p id="ui-final-comment" style="margin-bottom: 30px; color: #cbd5e1; line-height: 1.5;"></p>
+            <button class="btn-reset" onclick="startQuiz()">Volver a Jugar</button>
         </div>
 
     </div>
 
     <script>
-        // --- BANCO TOTAL DE PREGUNTAS (22 CONCEPTOS CRÍTICOS UNQ) ---
-        const masterQuestionPool = [
+        // Banco de 15 preguntas sencillas
+        const basicQuestionsPool = [
             {
-                text: "El proceso de digitalización de sonido se divide en dos fases independientes que operan en ejes distintos: el muestreo actúa sobre el eje del tiempo y la cuantización sobre el eje de la amplitud.",
+                text: "El oído humano joven y sano puede escuchar sonidos entre los 20 Hz y los 20.000 Hz.",
                 answer: true,
-                explanation: "¡Correcto! Son procesos ortogonales. El muestreo fija la precisión temporal (eje X) y la cuantización define los pasos discretos de voltaje/amplitud (eje Y)."
+                explanation: "¡Verdadero! Ese es el rango de frecuencias audibles estándar para los seres humanos."
             },
             {
-                text: "Para evitar el aliasing de forma destructiva, el filtro antialias (pasa-bajo analógico de alta pendiente) debe ser insertado inmediatamente después de que la señal pase por el conversor Analógico-Digital (ADC).",
+                text: "Un filtro Pasa-Altos (HPF) corta los sonidos agudos y deja pasar únicamente los graves.",
                 answer: false,
-                explanation: "Falso. El filtro antialias debe colocarse ANTES de la conversión digital (ADC). Si la señal analógica ingresa al conversor con frecuencias que superan el límite de Nyquist, el aliasing ocurre dentro del chip y ya no se puede remover."
+                explanation: "¡Falso! Al revés: el Pasa-Altos deja pasar los agudos (altos) y elimina los graves molestos."
             },
             {
-                text: "Si se graba un pasaje musical con niveles de ganancia muy bajos (ej: picos en -18 dBFS) usando una resolución de 16 bits, la SQNR efectiva para esa señal cae de los 96 dB ideales a un valor real de 72 dB.",
+                text: "El proceso de muestreo (sampling) toma capturas de la señal en el eje del tiempo.",
                 answer: true,
-                explanation: "¡Correcto! Aplicando la fórmula de Di Liscia ($SQNR = 6.02 \\cdot b + \\text{Amplitud Effective}$), tenemos: $96 \\text{ dB} + (-18 \\text{ dBFS}) = 72 \\text{ dB}$. La señal pierde relación señal a ruido de cuantización si se graba bajo."
+                explanation: "¡Verdadero! Muestrear es tomar muestras a intervalos regulares de tiempo (como 44.100 veces por segundo)."
             },
             {
-                text: "Las normas de cuantización no uniforme Mu-Law y A-Law, comunes en telecomunicaciones, asignan una menor resolución (grilla más espaciada) a los valores cercanos a cero y máxima precisión a los picos más altos de señal.",
+                text: "La velocidad del sonido en el aire es de aproximadamente 340 metros por segundo.",
+                answer: true,
+                explanation: "¡Verdadero! Es la velocidad promedio a la que viaja el sonido en condiciones normales de temperatura."
+            },
+            {
+                text: "Subir los bits de grabación (de 16 a 24 bits) permite capturar frecuencias más altas.",
                 answer: false,
-                explanation: "Falso. Asignan MAYOR resolución y densidad de niveles a los valores pequeños cercanos a cero para capturar los detalles articulados de la voz humana, y menor resolución a las amplitudes máximas."
+                explanation: "¡Falso! Los bits manejan la precisión del volumen y el rango dinámico. Las frecuencias las maneja el muestreo."
             },
             {
-                text: "La operación de 'Ajustar Frecuencia de Muestreo' (Adjust Sample Rate) en un software editor modifica los metadatos del encabezado pero no recalcula ni altera matemáticamente los valores binarios de las muestras.",
+                text: "En el eco podemos escuchar las repeticiones del sonido de forma separada y clara.",
                 answer: true,
-                explanation: "¡Correcto! Funciona idéntico a acelerar o frenar la velocidad de un motor en un pasacintas analógico: altera la duración y la altura espectral (tono/pitch) en tándem sin reescribir los datos numéricos."
+                explanation: "¡Verdadero! A diferencia de la reverberación, el eco tiene suficiente retraso como para que el cerebro note cada repetición por separado."
             },
             {
-                text: "El proceso de mezcla multipista (Mixdown) se reduce matemáticamente a una multiplicación continua de los valores numéricos binarios de las muestras involucradas instante a instante.",
+                text: "Para que dos o más pistas suenen juntas en un programa de audio (DAW), el software realiza una suma matemática de sus señales.",
+                answer: true,
+                explanation: "¡Verdadero! Mezclar canales de audio equivale a sumar sus amplitudes instantáneas."
+            },
+            {
+                text: "Un ecualizador sirve para modificar el volumen de zonas específicas del espectro de frecuencias (como graves o agudos).",
+                answer: true,
+                explanation: "¡Verdadero! Te permite retocar el timbre dándole más o menos ganancia a ciertas frecuencias."
+            },
+            {
+                text: "El Teorema de Nyquist dice que la frecuencia de muestreo debe ser al menos la mitad de la frecuencia más alta que queremos grabar.",
                 answer: false,
-                explanation: "Falso. La mezcla pura equivale a una SUMA aritmética de las muestras término a término. La multiplicación por escalares se emplea para aplicar ganancia o modificar los faders de volumen."
+                explanation: "¡Falso! Exige que sea el DOBLE de la frecuencia más alta para evitar distorsiones (aliasing)."
             },
             {
-                text: "El filtro Notch es un tipo especial de filtro de rechaza-banda diseñado intencionalmente con un Factor de Calidad (Q) muy bajo, permitiendo atenuar un espectro de frecuencias sumamente ancho.",
+                text: "Las conexiones de inserción (inserts) se usan para enviar el 100% de la señal a un procesador conectado en serie (como un compresor).",
+                answer: true,
+                explanation: "¡Verdadero! El insert corta el camino del canal para que toda la señal pase obligatoriamente por el efecto."
+            },
+            {
+                text: "Las frecuencias graves tienen ciclos por segundo (Hz) más altos que las frecuencias agudas.",
                 answer: false,
-                explanation: "Falso. El filtro Notch posee un Factor Q extremadamente ALTO, logrando un ancho de banda ultra-estrecho y preciso ('quirúrgico') para remover ruidos específicos (ej. zumbido eléctrico de 50Hz) sin colorear el resto."
+                explanation: "¡Falso! Los graves son frecuencias bajas (pocos Hz, ej: 60 Hz), mientras que los agudos son frecuencias altas (muchos Hz, ej: 10.000 Hz)."
             },
             {
-                text: "Un filtro Pasa-Todo (All-Pass Filter) entrega una respuesta de amplitud completamente plana en todo el espectro audible, limitándose exclusivamente a alterar las relaciones de fase en el eje del tiempo.",
+                text: "La reverberación está compuesta por muchísimas reflexiones del sonido tan juntas que el cerebro no las puede separar.",
                 answer: true,
-                explanation: "¡Correcto! No atenúa ni realza ninguna frecuencia; solo introduce desfases controlados en el tiempo. Es vital para construir Phasers y algoritmos de Reverb."
+                explanation: "¡Verdadero! Es el rebote continuo en las paredes que genera esa sensación de espacio o sala."
             },
             {
-                text: "De acuerdo con lo establecido por Basso, los ecualizadores gráficos entregan su menor nivel de ruido intrínseco (propio del circuito) cuando todos sus faders se sitúan planos en la posición central de 0 dB.",
+                text: "Un cable de audio desenchufado que genera zumbido está metiendo interferencia o ruido al sistema.",
                 answer: true,
-                explanation: "¡Correcto! Modificar los potenciómetros hacia arriba o abajo incrementa el siseo y el ruido térmico del circuito de amplificadores operacionales que manejan las bandas fijas."
+                explanation: "¡Verdadero! Los ruidos eléctricos e inducciones externos ensucian la señal útil de audio."
             },
             {
-                text: "En un ecualizador paramétrico, el Factor de Calidad (Q) se calcula dividiendo la Frecuencia Central por el Ancho de Banda ($Q = f_c / \\Delta f$), lo que significa que un valor de Q más alto estrecha la banda afectada.",
-                answer: true,
-                explanation: "¡Correcto! A mayor número de Q, menor es el ancho de banda ($\\Delta f$), convirtiendo al filtro en una herramienta mucho más selectiva y precisa."
-            },
-            {
-                text: "Los crossovers activos operan a nivel de potencia y se conectan siempre entre la salida del amplificador de potencia y los parlantes físicos (tweeters/woofers).",
+                text: "El botón de Solo (S) en una pista sirve para silenciar ese canal y escuchar todo lo demás.",
                 answer: false,
-                explanation: "Falso. Esos son los crossovers pasivos. Los crossovers ACTIVOS operan a nivel de línea y se ubican ANTES de las etapas de amplificación, permitiendo sistemas eficientes de bi o tri-amplificación."
+                explanation: "¡Falso! El botón 'Solo' hace que escuches únicamente esa pista, silenciando el resto de los canales."
             },
             {
-                text: "La bi-amplificación activa tiene como ventajas optimizar la distribución de la potencia eléctrica total y reducir la distorsión por intermodulación en las etapas de salida.",
+                text: "Un afinador de guitarra mide la frecuencia fundamental de la cuerda para saber si está en la nota correcta.",
                 answer: true,
-                explanation: "¡Correcto! Al segmentar las frecuencias antes de amplificar, cada etapa de potencia trabaja de forma lineal y desahogada en su rango específico."
-            },
-            {
-                text: "Los procesadores dinámicos y espectrales quirúrgicos (como compresores y ecualizadores) se rutean por vía de Inserción (en serie) debido a que necesitan procesar el 100% de la señal del canal.",
-                answer: true,
-                explanation: "¡Correcto! En la inserción, el dispositivo intercepta la totalidad del flujo de señal (100% wet). No se busca mezclar el audio procesado con el original seco en el canal."
-            },
-            {
-                text: "En un delay analógico basado en cinta magnética, el tiempo de retraso mínimo está físicamente limitado por la distancia mínima constructiva que existe entre el cabezal de grabación y el de reproducción.",
-                answer: true,
-                explanation: "¡Correcto! Al estar fijos en el chasis, la cinta requiere un tiempo mínimo en viajar de un cabezal a otro, impidiendo delays milimétricos inferiores a ~40-50 ms en la mayoría de los equipos."
-            },
-            {
-                text: "En un delay digital, cuando el puntero de escritura alcanza la última dirección de la memoria RAM asignada, el procesador detiene el audio y arroja un error destructivo de desbordamiento de búfer.",
-                answer: false,
-                explanation: "Falso. La memoria RAM del delay digital funciona como una estructura cíclica (anillo). Al llegar al final, el puntero regresa de forma automática a la dirección inicial, sobreescribiendo los datos antiguos ya leídos."
-            },
-            {
-                text: "El Efecto de Precedencia (o Efecto Haas) describe que si dos sonidos idénticos llegan al oído con una diferencia menor a 30-40 ms, el cerebro los interpreta como dos ecos claramente separados.",
-                answer: false,
-                explanation: "Falso. Menos de 30-40 ms es el umbral de integración. El cerebro los fusiona en un ÚNICO evento sonoro unificado. Si supera ese umbral de tiempo, recién ahí se percibe el eco separado."
-            },
-            {
-                text: "Bajo las condiciones del Efecto Haas, la localización espacial de la fuente integrada queda determinada por el sonido que arriba al sistema auditivo en primer lugar.",
-                answer: true,
-                explanation: "¡Correcto! El cerebro prioriza de manera absoluta la dirección del primer arribo para determinar la ubicación espacial, ignorando la dirección del segundo estímulo retardado."
-            },
-            {
-                text: "El efecto de Flanger opera típicamente con retardos de tiempo variables ultra cortos distribuidos entre 1 y 10 milisegundos, generando un severo patrón dinámico de filtro de peine.",
-                answer: true,
-                explanation: "¡Correcto! Tiempos tan breves (1-10 ms) provocan cancelaciones drásticas en fase al sumarse con la señal original seca, dando ese sonido metálico característico acelerado por el feedback."
-            },
-            {
-                text: "El efecto de Chorus opera habitualmente en una ventana temporal de retardo de entre 15 y 35 milisegundos, aprovechando micro-desafinaciones por efecto Doppler para emular un comportamiento de unísonos.",
-                answer: true,
-                explanation: "¡Correcto! Al superar el rango del flanger pero manteniéndose dentro del umbral de Haas, aporta sensación de densidad, anchura y amplitud estéreo sin generar cancelaciones metálicas directas."
-            },
-            {
-                text: "El Dithering es una técnica que consiste en remover bits de forma aleatoria para limpiar el siseo residual al momento de exportar audio a bajas resoluciones.",
-                answer: false,
-                explanation: "Falso. El Dithering consiste en AÑADIR un ruido aleatorio de muy bajo nivel no correlativo antes de reducir los bits. Esto convierte la distorsión armónica no lineal (que suena fea) en un ruido sutil lineal continuo."
-            },
-            {
-                text: "La frecuencia de muestreo de un sistema digital gobierna la discretización del eje del tiempo, determinando directamente la frecuencia máxima analógica que es posible capturar sin errores.",
-                answer: true,
-                explanation: "¡Correcto! El sample rate maneja el tiempo. El teorema de Nyquist exige que dicha tasa sea superior al doble de la componente de frecuencia analógica más alta de la señal."
-            },
-            {
-                text: "Un filtro pasa-altos (HPF) atenúa las frecuencias graves por debajo de su frecuencia de corte, resultando sumamente útil para recuperar margen dinámico (headroom) en una mezcla al remover ruidos espurios de baja frecuencia.",
-                answer: true,
-                explanation: "¡Correcto! Quitar soplidos mecánicos o ruidos sub-graves innecesarios libera energía en el bus sumador, permitiendo mayor potencia para los componentes útiles de la música."
+                explanation: "¡Verdadero! Detecta los ciclos por segundo (Hz) de la nota para indicarte si está alta o baja."
             }
         ];
 
-        // --- MOTOR DEL CUESTIONARIO ---
-        const QUESTIONS_PER_GAME = 10; // Cantidad de preguntas por ronda
-        let currentQuizDataset = [];
-        let activeQuestionIndex = 0;
-        let accumulatedScore = 0;
+        let gameQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
 
-        // Función encargada de barajar un array (Algoritmo Fisher-Yates para perfecta aleatoriedad)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
         }
 
-        // Inicializa o reinicia por completo el motor del examen
-        function initiateQuizEngine() {
-            // Escondemos resultados y mostramos pantalla de juego
+        function startQuiz() {
             document.getElementById('results-stage').style.display = 'none';
             document.getElementById('game-stage').style.display = 'block';
             
-            // Barajar el banco total y tomar un subconjunto fresco de 10 preguntas
-            const shuffledPool = shuffleArray([...masterQuestionPool]);
-            currentQuizDataset = shuffledPool.slice(0, QUESTIONS_PER_GAME);
+            // Mezclar y elegir 10
+            gameQuestions = shuffle([...basicQuestionsPool]).slice(0, 10);
+            currentIndex = 0;
+            score = 0;
+            document.getElementById('ui-live-score').innerText = score;
             
-            // Limpieza de estados
-            activeQuestionIndex = 0;
-            accumulatedScore = 0;
-            document.getElementById('ui-live-score').innerText = accumulatedScore;
-
-            presentCurrentQuestion();
+            showQuestion();
         }
 
-        // Dibuja la pregunta activa en la pantalla
-        function presentCurrentQuestion() {
-            // Resetear interfaz de retroalimentación y ocultar botón 'Siguiente'
+        function showQuestion() {
             const feedbackBox = document.getElementById('ui-feedback-box');
             feedbackBox.style.display = 'none';
             feedbackBox.className = 'feedback-panel';
             document.getElementById('ui-next-btn').style.display = 'none';
             
-            // Habilitar de nuevo los botones de decisión
-            document.querySelectorAll('.btn-choice').forEach(btn => btn.disabled = false);
+            document.querySelectorAll('.btn-choice').forEach(b => b.disabled = false);
 
-            // Cargar datos del reactivo
-            const questionData = currentQuizDataset[activeQuestionIndex];
-            document.getElementById('ui-current-index').innerText = `Pregunta ${activeQuestionIndex + 1} de ${QUESTIONS_PER_GAME}`;
-            document.getElementById('ui-question-text').innerText = questionData.text;
-            
-            // Actualizar la barra de progreso visual
-            const currentProgress = (activeQuestionIndex / QUESTIONS_PER_GAME) * 100;
-            document.getElementById('ui-progress-bar').style.width = `${currentProgress}%`;
+            const q = gameQuestions[currentIndex];
+            document.getElementById('ui-current-index').innerText = `Pregunta ${currentIndex + 1} de 10`;
+            document.getElementById('ui-question-text').innerText = q.text;
+            document.getElementById('ui-progress-bar').style.width = `${(currentIndex / 10) * 100}%`;
         }
 
-        // Evalúa la respuesta elegida por el alumno
-        function evaluateUserAnswer(selectedBoolean) {
-            // Bloquear los botones para evitar doble clic o correcciones tramposas
-            document.querySelectorAll('.btn-choice').forEach(btn => btn.disabled = true);
+        function evaluateAnswer(userChoice) {
+            document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
             
-            const questionData = currentQuizDataset[activeQuestionIndex];
+            const q = gameQuestions[currentIndex];
             const feedbackBox = document.getElementById('ui-feedback-box');
             const feedbackTitle = document.getElementById('ui-feedback-title');
             const feedbackDesc = document.getElementById('ui-feedback-desc');
             
-            const userIsCorrect = (selectedBoolean === questionData.answer);
-            
-            if (userIsCorrect) {
-                accumulatedScore++;
-                document.getElementById('ui-live-score').innerText = accumulatedScore;
-                
-                feedbackTitle.innerText = "¡RESPUESTA CORRECTA!";
+            if (userChoice === q.answer) {
+                score++;
+                document.getElementById('ui-live-score').innerText = score;
+                feedbackTitle.innerText = "¡CORRECTO!";
                 feedbackBox.classList.add('correct');
             } else {
-                feedbackTitle.innerText = "RESPUESTA INCORRECTA";
+                feedbackTitle.innerText = "INCORRECTO";
                 feedbackBox.classList.add('incorrect');
             }
             
-            // Mostrar la justificación teórica detallada
-            feedbackDesc.innerText = questionData.explanation;
-            
-            // Liberar paso a la siguiente pregunta
+            feedbackDesc.innerText = q.explanation;
             document.getElementById('ui-next-btn').style.display = 'block';
         }
 
-        // Avanza el índice de la pregunta o corta para ir a resultados
-        function advanceNextQuestion() {
-            activeQuestionIndex++;
-            
-            if (activeQuestionIndex < QUESTIONS_PER_GAME) {
-                presentCurrentQuestion();
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < 10) {
+                showQuestion();
             } else {
-                // Rellenar barra al 100% en la última pregunta antes de salir
                 document.getElementById('ui-progress-bar').style.width = '100%';
-                setTimeout(displayFinalEvaluation, 350);
+                setTimeout(showResults, 400);
             }
         }
 
-        // Despliega la pantalla de cierre con análisis personalizado
-        function displayFinalEvaluation() {
+        function showResults() {
             document.getElementById('game-stage').style.display = 'none';
             document.getElementById('results-stage').style.display = 'block';
+            document.getElementById('ui-final-score').innerText = `${score} / 10`;
             
-            document.getElementById('ui-final-score').innerText = `${accumulatedScore} / ${QUESTIONS_PER_GAME}`;
-            
-            const commentElement = document.getElementById('ui-final-comment');
-            
-            if (accumulatedScore === QUESTIONS_PER_GAME) {
-                commentElement.innerText = "¡Excelente rendimiento académico! Dominás al milímetro cada recoveco de las leyes de codificación, métricas de SQNR, filtros quirúrgicos y ruteos temporales de Haas y LFO. El examen de la UNQ está liquidado.";
-            } else if (accumulatedScore >= 8) {
-                commentElement.innerText = "¡Muy buena cursada! Demostrás conocimientos sólidos y un entendimiento preciso de la materia. Prestale atención a las explicaciones específicas de los errores cometidos para asegurar tu promoción con diez.";
-            } else if (accumulatedScore >= 6) {
-                commentElement.innerText = "Aprobado, pero con margen de mejora. Tenés claros los conceptos generales, pero los detalles finos (como rutes, fórmulas o límites físicos del hardware) te jugaron en contra. Te recomiendo repasar a fondo.";
+            const comment = document.getElementById('ui-final-comment');
+            if (score >= 8) {
+                comment.innerText = "¡Buenísimo! Tenés muy claros los conceptos fundamentales y las bases del sonido. ¡Estás listo para pasar al nivel avanzado!";
+            } else if (score >= 6) {
+                comment.innerText = "¡Bien aprobado! Agarraste bien la idea general, dale otra repasada para asegurar los puntos donde hubo dudas.";
             } else {
-                commentElement.innerText = "Por debajo del umbral de aprobación. Los conceptos de audio analógico y digital siguen cruzados en tus respuestas. Releé de forma pausada los apuntes técnicos y volvé a generar un test para fijar los cimientos.";
+                comment.innerText = "Un tropezón no es caída. Algunos conceptos básicos se mezclaron. Volvé a jugar para fijar bien las bases.";
             }
         }
 
-        // Auto-arranque al cargar el DOM de la página
-        window.onload = initiateQuizEngine;
+        window.onload = startQuiz;
     </script>
 </body>
 </html>
