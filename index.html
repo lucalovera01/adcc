@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compendio Enciclopédico de Audio Digital, Filtros y Efectos</title>
+    <title>Dashboard interactivo de Estudio: Audio Digital, Filtros y Delays</title>
     <style>
         :root {
-            --bg-slate: #090d16;
-            --bg-card: #131c2e;
-            --border-slate: #1e293b;
-            --text-main: #94a3b8;
+            --bg-main: #0b0f19;
+            --bg-card: #151f32;
+            --border-color: #22314d;
+            --text-muted: #94a3b8;
             --text-light: #f8fafc;
-            --cyan: #38bdf8;
-            --emerald: #34d399;
-            --rose: #f43f5e;
-            --amber: #fbbf24;
+            --primary-cyan: #38bdf8;
+            --exam-amber: #fbbf24;
+            --emerald-green: #34d399;
+            --rose-pink: #f43f5e;
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            background-color: var(--bg-slate);
-            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-muted);
             margin: 0;
-            padding: 30px 15px;
+            padding: 25px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -30,67 +30,95 @@
 
         header {
             text-align: center;
-            max-width: 1100px;
-            margin-bottom: 35px;
+            max-width: 1000px;
+            margin-bottom: 30px;
         }
 
-        h1 {
+        header h1 {
             color: var(--text-light);
-            font-size: 2.4rem;
+            font-size: 2.3rem;
             margin: 0 0 10px 0;
             font-weight: 800;
-            letter-spacing: -0.5px;
         }
 
-        h1 span {
-            color: var(--cyan);
+        header h1 span {
+            color: var(--primary-cyan);
         }
 
-        header p {
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .filter-container {
+        /* Selectores de modo principal */
+        .mode-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-            position: sticky;
-            top: 15px;
-            z-index: 100;
+            background-color: #111827;
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            gap: 5px;
         }
 
-        .filter-btn {
-            background-color: #1e293b;
-            border: 1px solid var(--border-slate);
-            color: var(--text-light);
-            padding: 12px 20px;
+        .mode-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 0.95rem;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+            transition: all 0.25s ease;
         }
 
-        .filter-btn:hover {
-            border-color: var(--cyan);
-            background-color: rgba(56, 189, 248, 0.05);
+        .mode-btn:hover {
+            color: var(--text-light);
         }
 
-        .filter-btn.active {
-            background-color: var(--cyan);
-            color: #040711;
-            border-color: var(--cyan);
+        .mode-btn.active[data-mode="exam"] {
+            background-color: var(--exam-amber);
+            color: #0b0f19;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+        }
+
+        .mode-btn.active[data-mode="full"] {
+            background-color: var(--primary-cyan);
+            color: #0b0f19;
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
         }
 
+        /* Barra de filtros de categorías */
+        .category-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cat-btn {
+            background-color: #1e293b;
+            border: 1px solid var(--border-slate);
+            color: var(--text-light);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+        }
+
+        .cat-btn:hover {
+            border-color: var(--primary-cyan);
+        }
+
+        .cat-btn.active {
+            background-color: #334155;
+            border-color: var(--primary-cyan);
+            color: var(--primary-cyan);
+        }
+
+        /* Grid de Tarjetas */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
             gap: 25px;
             width: 100%;
             max-width: 1400px;
@@ -98,472 +126,447 @@
 
         .card {
             background-color: var(--bg-card);
-            border: 1px solid var(--border-slate);
+            border: 1px solid var(--border-color);
             border-radius: 14px;
-            padding: 26px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
-            transition: all 0.25s ease;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
         .card:hover {
             transform: translateY(-4px);
-            border-color: var(--cyan);
-            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(56, 189, 248, 0.2);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7);
         }
+
+        /* Estilo condicional según vista */
+        .card.exam-intent { border-left: 5px solid var(--exam-amber); }
+        .card.full-intent { border-left: 5px solid var(--primary-cyan); }
 
         .card-tag {
             font-size: 0.7rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             margin-bottom: 12px;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
             width: fit-content;
         }
-
-        .tag-cod { background-color: rgba(56, 189, 248, 0.12); color: var(--cyan); }
-        .tag-fil { background-color: rgba(52, 211, 153, 0.12); color: var(--emerald); }
-        .tag-str { background-color: rgba(244, 63, 94, 0.12); color: var(--rose); }
-        .tag-proc { background-color: rgba(251, 191, 36, 0.12); color: var(--amber); }
+        .tag-audio { background-color: rgba(56, 189, 248, 0.12); color: var(--primary-cyan); }
+        .tag-filtros { background-color: rgba(52, 211, 153, 0.12); color: var(--emerald-green); }
+        .tag-delays { background-color: rgba(244, 63, 94, 0.12); color: var(--rose-pink); }
 
         .card-title {
             color: var(--text-light);
-            font-size: 1.35rem;
-            margin: 0 0 14px 0;
+            font-size: 1.3rem;
+            margin: 0 0 15px 0;
             font-weight: 700;
-            line-height: 1.3;
         }
 
         .card-body {
-            font-size: 0.95rem;
+            font-size: 0.94rem;
             line-height: 1.6;
             flex-grow: 1;
         }
 
-        .card-body p {
-            margin: 0 0 12px 0;
-        }
-
-        .card-body ul, .card-body ol {
-            margin: 8px 0;
-            padding-left: 18px;
-        }
-
-        .card-body li {
-            margin-bottom: 8px;
-        }
+        .card-body p { margin: 0 0 12px 0; }
+        .card-body ul, .card-body ol { margin: 8px 0; padding-left: 18px; }
+        .card-body li { margin-bottom: 6px; }
 
         .formula-box {
-            background-color: #080c14;
-            border-left: 4px solid var(--cyan);
-            font-family: 'Consolas', 'Fira Code', Monaco, monospace;
-            padding: 12px;
-            font-size: 0.88rem;
+            background-color: #090d16;
+            border: 1px solid #1e293b;
+            font-family: 'Consolas', monospace;
+            padding: 10px;
+            font-size: 0.85rem;
             color: #e2e8f0;
-            border-radius: 0 8px 8px 0;
-            margin: 14px 0;
+            border-radius: 6px;
+            margin: 12px 0;
             white-space: pre-wrap;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        .formula-box.emerald-line { border-left-color: var(--emerald); }
-        .formula-box.rose-line { border-left-color: var(--rose); }
+        /* Contenedor especial para alertas de gráficos de clase */
+        .class-chart-box {
+            background-color: rgba(251, 191, 36, 0.06);
+            border: 1px dashed var(--exam-amber);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 14px;
+            font-size: 0.85rem;
+            color: #fef08a;
+        }
+        .class-chart-box strong { color: var(--exam-amber); }
 
-        .meta-source {
+        .meta-citation {
             font-size: 0.75rem;
             color: #475569;
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px solid #1e293b;
             font-style: italic;
-            display: flex;
-            justify-content: space-between;
         }
 
         @media (max-width: 768px) {
             .cards-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 1.8rem; }
+            header h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Base Temática Completa: <span>Audio, Filtros y Efectos</span></h1>
-        <p>Entorno interactivo con el vaciado completo de la bibliografía oficial de la UNQ y de Sistemas de Sonido. Diseñado para un desglose exhaustivo término por término.</p>
+        <h1>Mesa de Estudio: <span>Audio, Filtros & Delays</span></h1>
+        <p>Cargá este entorno interactivo en tu GitHub Pages para conmutar entre los contenidos obligatorios del examen de mañana y el compendio bibliográfico completo.</p>
     </header>
 
-    <div class="filter-container">
-        <button class="filter-btn active" onclick="filterData('all')">Ver Todo la Bibliografía</button>
-        <button class="filter-btn" onclick="filterData('codificacion')">Codificación Digital (UNQ C.5)</button>
-        <button class="filter-btn" onclick="filterData('procesamiento')">Principios de Proc. (UNQ C.8)</button>
-        <button class="filter-btn" onclick="filterData('filtros')">Filtros y EQ (Basso C.11)</button>
-        <button class="filter-btn" onclick="filterData('estructuras')">Estructuras y Efectos (Basso C.16-20)</button>
+    <div class="mode-container">
+        <button class="mode-btn active" data-mode="exam" onclick="switchMode('exam')">🎯 TEMAS DEL EXAMEN</button>
+        <button class="mode-btn" data-mode="full" onclick="switchMode('full')">📚 TODA LA INFO (BIBLIOGRAFÍA)</button>
     </div>
 
-    <main class="cards-grid" id="mainGrid">
+    <div class="category-bar">
+        <button class="cat-btn active" data-cat="all" onclick="filterCategory('all')">Todos los bloques</button>
+        <button class="cat-btn" data-cat="audio" onclick="filterCategory('audio')">Audio Digital</button>
+        <button class="cat-btn" data-cat="filtros" onclick="filterCategory('filtros')">Filtros</button>
+        <button class="cat-btn" data-cat="delays" onclick="filterCategory('delays')">Delays</button>
+    </div>
 
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">La Cadena Electroacústica</h2>
+    <main class="cards-grid" id="cardsGrid">
+        
+        <div class="card exam-intent" data-view="exam" data-category="audio">
+            <div class="card-tag tag-audio">Examen · Audio Digital</div>
+            <h2 class="card-title">Parámetros Críticos: Frecuencia de Muestreo y Bits</h2>
             <div class="card-body">
-                <p>El sonido en el aire es una variación de presión mecánica. Para procesarlo digitalmente, debe transitar una cadena de transformaciones energéticas fijas:</p>
+                <p>Ejes fundamentales que definen las dos dimensiones de una señal discreta de audio:</p>
+                <ul>
+                    <li><strong>Frecuencia de Muestreo (Sample Rate):</strong> Gobierna el eje del <em>tiempo</em>. Mide cuántas veces por segundo se toma una muestra de voltaje. Estipula la frecuencia analógica máxima almacenable de acuerdo al Teorema de Nyquist ($f_{Nyquist} = f_s / 2$).</li>
+                    <li><strong>Profundidad de Bits (Bit Depth):</strong> Gobierna el eje de la <em>amplitud</em>. Determina la precisión numérica o cantidad de escalones disponibles en la grilla binaria para aproximar la amplitud de la onda. Afecta de modo directo el piso de ruido de cuantización y el rango dinámico del sistema.</li>
+                </ul>
+            </div>
+            <div class="meta-citation">Eje central de evaluación - Técnicas de Sonido Digital, Cap. 5</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="audio">
+            <div class="card-tag tag-audio">Examen · Audio Digital</div>
+            <h2 class="card-title">Mecanismo de Buffer y Latencia</h2>
+            <div class="card-body">
+                <p>Compromiso operacional crítico en el procesamiento informático de audio en tiempo real:</p>
+                <ul>
+                    <li><strong>Buffer:</strong> Bloque o segmento de memoria RAM intermedia destinado a almacenar temporalmente paquetes de muestras antes de ser procesados por la CPU o enviados a la interfaz. Se configura en muestras fijas (ej: 64, 128, 512 samples).</li>
+                    <li><strong>Latencia:</strong> Retraso temporal audible introducido por el flujo informático. Su relación es estrictamente lineal al tamaño del buffer:
+                        <ul>
+                            <li><em>Buffers pequeños:</em> Menor latencia (ideal para monitoreo y grabación), pero extrema demanda a la CPU (riesgo de clicks y cortes de audio).</li>
+                            <li><em>Buffers grandes:</em> Mayor latencia, pero alivio computacional para procesos pesados de mezcla y carga de plug-ins.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="meta-citation">Concepto operativo de Software - Técnicas de Sonido Digital, Cap. 5</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="filtros">
+            <div class="card-tag tag-filtros">Examen · Filtros</div>
+            <h2 class="card-title">Respuesta en Frecuencia y Respuesta en Fase</h2>
+            <div class="card-body">
+                <p>Las dos alteraciones vectoriales que produce un filtro sobre el espectro de una señal:</p>
+                <ul>
+                    <li><strong>Respuesta en Frecuencia (Magnitud):</strong> Indica cómo modifica el filtro la amplitud de las componentes de frecuencia. Se visualiza en un plano cartesiano (dB versus Frecuencia) mapeando las bandas atenuadas o amplificadas.</li>
+                    <li><strong>Respuesta en Fase:</strong> Representa las alteraciones de tiempo o desfases temporales relativos que sufren las diferentes frecuencias al ser filtradas. Esto altera los transitorios y la linealidad en el tiempo de la señal, pudiendo ocasionar cancelaciones acústicas graves al combinarse con pistas paralelas.</li>
+                </ul>
+            </div>
+            <div class="meta-citation">Análisis de Sistemas - Acústica y Sistemas de Sonido, Cap. 11</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="filtros">
+            <div class="card-tag tag-filtros">Examen · Filtros</div>
+            <h2 class="card-title">Tipos de Ecualizadores y Aplicación de Filtros Base</h2>
+            <div class="card-body">
+                <p>Clasificación funcional e instrumentación en el entorno profesional:</p>
+                <ul>
+                    <li><strong>Filtros Base (HPF / LPF):</strong> El Pasa-altos (HPF) es obligatorio a la entrada de canales para limpiar ruidos de baja frecuencia causados por viento o vibración, salvando rango dinámico. El Pasa-bajos (LPF) remueve siseos de alta frecuencia.</li>
+                    <li><strong>Ecualizador Gráfico:</strong> Divide el espectro en bandas de frecuencias fijas por hardware/software. El usuario solo controla la ganancia. <em>Dato de medición:</em> Su ruido propio es menor cuando los faders se mantienen planos en 0 dB.</li>
+                    <li><strong>Ecualizador Paramétrico:</strong> Ofrece control absoluto, continuo e independiente sobre los tres parámetros clave: Frecuencia central, Ganancia y factor Q.</li>
+                </ul>
+            </div>
+            <div class="meta-citation">Instrumentación - Técnicas de Sonido Digital, Cap. 8 & Basso Cap. 11</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="filtros">
+            <div class="card-tag tag-filtros">Examen · Filtros</div>
+            <h2 class="card-title">Glosario de Parámetros: fc, Q, Ganancia y Curva</h2>
+            <div class="card-body">
+                <p>Conceptos clave para describir matemáticamente la acción de un filtro:</p>
+                <ul>
+                    <li><strong>Frecuencia de Corte ($f_c$):</strong> Límite donde el filtro reduce la amplitud a la mitad. Equivale a una atenuación fija de <strong>-3 dB</strong> (0.707 de la tensión).</li>
+                    <li><strong>Factor de Calidad (Q):</strong> Controla el ancho de banda ($\Delta f$). A mayor valor de Q, la campana es más estrecha y selectiva. Se calcula como $Q = f_0 / \Delta f$.</li>
+                    <li><strong>Ganancia:</strong> Nivel de realce o atenuación aplicado en decibeles (dB).</li>
+                    <li><strong>Curva o Pendiente de Atenuación (Rolnoff):</strong> Velocidad de caída del filtro fuera de la banda de paso. Se mide en <strong>dB/octava</strong> y depende del número de polos del diseño (1 polo = 6 dB/oct, 2 polos = 12 dB/oct, etc.).</li>
+                </ul>
+            </div>
+            <div class="meta-citation">Definiciones de Cátedra - Acústica y Sistemas de Sonido, Cap. 11</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="delays">
+            <div class="card-tag tag-delays">Examen · Delays</div>
+            <h2 class="card-title">Efecto de Precedencia (Efecto Haas)</h2>
+            <div class="card-body">
+                <p>Fenómeno psicoacústico crítico para la percepción espacial y el diseño de sistemas de refuerzo sonoro:</p>
+                <ul>
+                    <li><strong>Mecanismo:</strong> Si dos sonidos idénticos llegan al sistema auditivo desde locaciones distintas con una diferencia temporal menor a **30-40 ms**, el cerebro los integra como un único evento sonoro.</li>
+                    <li><strong>Localización:</strong> La dirección aparente de la fuente queda determinada exclusivamente por el sonido que arriba **primero** (el que tiene precedencia), ignorando la dirección de la segunda fuente aunque sea levemente más fuerte.</li>
+                    <li><strong>Umbral:</strong> Si el retraso supera este rango temporal, la integración colapsa y el sujeto percibe con claridad dos eventos acústicos separados (eco repetitivo).</li>
+                </ul>
+            </div>
+            <div class="meta-citation">Psicoacústica aplicada - Técnicas de Sonido Digital, Cap. 16 a 20</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="delays">
+            <div class="card-tag tag-delays">Examen · Delays</div>
+            <h2 class="card-title">Estructura de la Línea de Retardo: Feedback y Filtros</h2>
+            <div class="card-body">
+                <p>Elementos de control dentro de un proceso en paralelo basado en delay:</p>
+                <ul>
+                    <li><strong>Feedback (Realimentación):</strong> Consiste en reinyectar una porción controlada de la señal de salida retrasada de vuelta a la entrada del búfer de retardo. Esto genera repeticiones continuas y sucesivas en el tiempo (ecos decrecientes). Un exceso de feedback puede producir autooscilación inestable.</li>
+                    <li><strong>Filtros en el Feedback:</strong> Inserción de un filtro (generalmente pasa-bajos) en el bucle de realimentación. Provoca que cada eco sucesivo sea progresivamente más opaco, simulando la absorción acústica natural del aire y los materiales en salas reales.</li>
+                </ul>
+                <div class="class-chart-box">
+                    <strong>⚠️ RECORDATORIO DE EXAMEN:</strong> Dar prioridad absoluta al <strong>diagrama de bloques visto en la carpeta de clase</strong> (flujo de señal Dry/Wet, punto de suma, nodo de realimentación y ubicación del filtro) en lugar del esquema alternativo expuesto en los textos.
+                </div>
+            </div>
+            <div class="meta-citation">Topología de Efectos - Técnicas de Sonido Digital, Cap. 16 a 20</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="delays">
+            <div class="card-tag tag-delays">Examen · Delays</div>
+            <h2 class="card-title">Delay Variable y Modulación: El Flanger</h2>
+            <div class="card-body">
+                <p>Efecto de tiempo dinámico caracterizado por un timbre metálico y cíclico:</p>
+                <ul>
+                    <li><strong>Rango Temporal:</strong> Tiempos de retardo extremadamente cortos, comprendidos entre <strong>1 ms y 10 ms</strong>.</li>
+                    <li><strong>Modulación:</strong> Un oscilador de baja frecuencia (LFO) varía continuamente el tiempo de delay, provocando corrimientos de frecuencia por efecto Doppler de tiempo discreto.</li>
+                    <li><strong>Fenómeno Acústico:</strong> Al sumarse en paralelo con la señal limpia, la cercanía temporal extrema produce un **Filtro de Peine (Comb Filter)** severo cuyos picos y valles barren de forma audible el espectro. Utiliza realimentación alta para potenciar la resonancia.</li>
+                </ul>
+            </div>
+            <div class="meta-citation">Modulación Corta - Técnicas de Sonido Digital, Cap. 16 a 20</div>
+        </div>
+
+        <div class="card exam-intent" data-view="exam" data-category="delays">
+            <div class="card-tag tag-delays">Examen · Delays</div>
+            <h2 class="card-title">Delay Variable y Modulación: El Chorus</h2>
+            <div class="card-body">
+                <p>Efecto diseñado para emular la multiplicidad de fuentes acústicas ejecutando al unísono:</p>
+                <ul>
+                    <li><strong>Rango Temporal:</strong> Tiempos de retardo intermedios, situados típicamente entre <strong>15 ms y 35 ms</strong>.</li>
+                    <li><strong>Operación:</strong> Al emplear retardos mayores que el flanger, se mitiga el efecto drástico del filtro de peine en zonas centrales. El LFO modula suavemente el tiempo de la línea, induciendo micro-desafinaciones e imprecisiones de tiempo.</li>
+                    <li><strong>Resultado Perceptivo:</strong> Engrosamiento del timbre, sensación de densidad, amplitud estéreo y espacialidad, simulando un coro de instrumentos independientes.</li>
+                </ul>
+            </div>
+            <div class="meta-citation">Modulación Intermedia - Técnicas de Sonido Digital, Cap. 16 a 20</div>
+        </div>
+
+
+        <div class="card full-intent" data-view="full" data-category="audio">
+            <div class="card-tag tag-audio">Bibliografía · UNQ Cap 5</div>
+            <h2 class="card-title">La Cadena Electroacústica Completa</h2>
+            <div class="card-body">
+                <p>Desglose de transformaciones energéticas en el flujo de digitalización:</p>
                 <ol>
-                    <li><strong>Señal Acústica:</strong> Cambios de presión sobre el medio aéreo.</li>
-                    <li><strong>Transductor de Entrada (Micrófono):</strong> Convierte variaciones mecánicas en variaciones de tensión eléctrica analógica proporcional.</li>
-                    <li><strong>Conversor A/D:</strong> Muestrea y cuantiza la tensión continua, transformándola en un flujo regular de palabras binarias fijas de información.</li>
-                    <li><strong>Conversor D/A y Transductor de Salida (Altavoz):</strong> Reconstruye la tensión analógica continua y la convierte nuevamente en presión de onda mecánica.</li>
+                    <li><strong>Señal Acústica:</strong> Variaciones de presión mecánica sobre las partículas de aire.</li>
+                    <li><strong>Micrófono (Transductor de entrada):</strong> Traduce los cambios mecánicos a variaciones continuas de voltaje eléctrico analógico.</li>
+                    <li><strong>Conversor A/D (ADC):</strong> Cuantiza y discretiza la señal eléctrica continua transformándola en palabras de datos binarios estables.</li>
+                    <li><strong>Conversor D/A (DAC) y Altavoz:</strong> Reconstruye el voltaje analógico y restituye la onda mecánica aérea transducida.</li>
                 </ol>
             </div>
-            <div class="meta-source"><span>Ref: Cap 5.2 - Cadena Electroacústica</span></div>
         </div>
 
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">Muestreo Temporal Discreto</h2>
+        <div class="card full-intent" data-view="full" data-category="audio">
+            <div class="card-tag tag-audio">Bibliografía · UNQ Cap 8</div>
+            <h2 class="card-title">Operaciones de Tasa de Muestreo: Resampling vs Adjust</h2>
             <div class="card-body">
-                <p>El muestreo (Sampling) toma instantáneas analógicas a intervalos de tiempo regulares dados por la frecuencia de muestreo ($f_s$). Transforma un dominio de tiempo continuo en un dominio discreto e indexado ($n$).</p>
-                <p>Si la tasa de muestreo es baja, los ciclos de ondas rápidas no se registran correctamente y aparecen frecuencias espurias en la reconstrucción. De aquí surge la necesidad matemática de fijar una cota de muestreo segura.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 5.3 - Muestreo</span></div>
-        </div>
-
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">Teorema de Nyquist-Shannon Completo</h2>
-            <div class="card-body">
-                <p>Establece de forma estricta que para poder digitalizar y reconstruir una señal sin pérdidas ni distorsión, la tasa o frecuencia de muestreo ($f_s$) debe ser estrictamente superior al doble de la componente de frecuencia más alta ($f_{max}$) contenida en la señal original.</p>
-                <div class="formula-box">fs > 2 · fmax</div>
-                <p>La frecuencia límite equivalente a la mitad de la tasa de muestreo ($f_s / 2$) se conoce formalmente como la <strong>Frecuencia de Nyquist</strong>.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 5.4 - Teorema de Muestreo</span></div>
-        </div>
-
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">Mecanismo Matemático del Aliasing</h2>
-            <div class="card-content card-body">
-                <p>Si una frecuencia analógica entrante ($f_{in}$) supera el límite de Nyquist ($f_s/2$), se solapará irremediablemente en el espectro base replegándose como una frecuencia falsa ($f_{alias}$). El texto matemático define la aparición de este alias mediante la fórmula:</p>
-                <div class="formula-box">f_alias = | f_in - k · fs |</div>
-                <p>Donde <em>k</em> es un número entero positivo cualquiera. Este fenómeno altera permanentemente el contenido espectral de la señal procesada.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 5.5 - Aliasing</span></div>
-        </div>
-
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">El Filtro Anti-Aliasing (A/D)</h2>
-            <div class="card-body">
-                <p>Debido a que el aliasing no se puede eliminar mediante software una vez ocurrida la conversión, es obligatorio colocar un elemento analógico físico previo al conversor:</p>
+                <p>Diferencia crítica en la manipulación de archivos digitales en Editores de Audio:</p>
                 <ul>
-                    <li><strong>Naturaleza:</strong> Filtro analógico de tipo pasa-bajos estricto (Low-pass).</li>
-                    <li><strong>Función:</strong> Elimina o atenúa drásticamente cualquier componente espectral de la señal analógica que se encuentre por encima de la Frecuencia de Nyquist antes de que la señal ingrese al muestreador.</li>
+                    <li><strong>Remuestreo (Resampling):</strong> Proceso netamente matemático que recalcula los valores de las muestras para adaptarlos a una nueva tasa. Al reducir el sample rate (Downsampling) es obligatorio aplicar por software un filtro pasa-bajos <em>antialias</em> para decapitar las frecuencias altas que superen el nuevo límite de Nyquist y evitar distorsión permanente.</li>
+                    <li><strong>Ajustar Frecuencia de Muestreo (Adjust Sample Rate):</strong> Cambia exclusivamente la velocidad a la que el software lee el flujo de muestras existente, sin alterar los números grabados. Actúa igual que un cambio de velocidad físico en una cinta magnética o vinilo: si se sube la tasa el audio dura menos y se vuelve agudo; si se baja el audio dura más y se vuelve grave en tono.</li>
                 </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 5.5 - Filtros de Entrada</span></div>
         </div>
 
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">Cuantización Lineal (Uniforme)</h2>
+        <div class="card full-intent" data-view="full" data-category="audio">
+            <div class="card-tag tag-audio">Bibliografía · UNQ Cap 8</div>
+            <h2 class="card-title">Matemática de la Mezcla y Control de Amplitud</h2>
             <div class="card-body">
-                <p>Mientras el muestreo discretiza el tiempo, la cuantización discretiza el eje de amplitudes. Consiste en mapear un voltaje analógico continuo a una grilla de escalones discretos definidos por una palabra binaria de $N$ bits.</p>
-                <p>El número total de niveles de amplitud disponibles se calcula mediante una potencia de base 2:</p>
-                <div class="formula-box">Niveles = 2^N</div>
-                <p>Por ejemplo, en una resolución estándar de 16 bits, el sistema cuenta exactamente con 65.536 valores de amplitud para representar la onda.</p>
+                <p>Las operaciones algebraicas básicas que ejecutan los secuenciadores multipistas (ej: REAPER):</p>
+                <ul>
+                    <li><strong>Mezcla (Sumación):</strong> La combinación de múltiples pistas se reduce a una adición lineal término a término de los valores de las muestras en cada instante de tiempo discreto $y[n] = x_1[n] + x_2[n] + ... + x_m[n]$. Si el total rebasa los límites del formato binario, ocurre <em>clipping</em> o saturación por truncamiento.</li>
+                    <li><strong>Control de Ganancia y Atenuación:</strong> Modificar el fader de volumen equivale a multiplicar cada muestra secuencial por un factor escalar fijo $g$: $y[n] = g \cdot x[n]$. Si $g$ cambia dinámicamente muestra a muestra siguiendo curvas logarítmicas o lineales, se producen automatizaciones de envolvente, Fades y Crossfades.</li>
+                </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 5.6 - Cuantización</span></div>
         </div>
 
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">Relación Señal/Ruido de Cuantización (SQNR)</h2>
+        <div class="card full-intent" data-view="full" data-category="audio">
+            <div class="card-tag tag-audio">Bibliografía · UNQ Cap 5</div>
+            <h2 class="card-title">SQNR Máxima vs. Degradación por Amplitud Efectiva</h2>
             <div class="card-body">
-                <p>La diferencia residual entre el valor real de amplitud de la onda analógica y el escalón entero de cuantización asignado genera el llamado <strong>Error de cuantización</strong>. Este error se comporta como un ruido intrínseco al sistema. La relación matemática máxima (SQNR) para señales senoidales puras se expresa como:</p>
-                <div class="formula-box">SQNR = 6.02 · N + 1.76 dB</div>
-                <p>Donde cada bit extra sumado al sistema reduce el error de cuantización a la mitad y añade de manera directa <strong>6 dB</strong> de rango dinámico teórico utilizable.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 5.9 - SQNR y Resolución</span></div>
-        </div>
-
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">Cálculo de Degradación por Nivel de Grabación</h2>
-            <div class="card-body">
-                <p>La SQNR máxima de la fórmula anterior solo se da si la señal alcanza el nivel pico del conversor (0 dB Full Scale). El texto de la UNQ aclara que si la señal efectiva ($S$) se graba a baja amplitud en $dB_{FS}$ (un valor negativo), la SQNR real remanente cae drásticamente según:</p>
+                <p>La relación señal-ruido de cuantización ideal para señales senoidales puras responde a la ecuación lineal estándar de cuantización uniforme:</p>
+                <div class="formula-box">SQNR = 6.02 · N + 1.76 dB (Aproximadamente 6 dB por cada bit extra)</div>
+                <p>Sin verborragia teórica, la bibliografía de la UNQ destaca que esta cifra decrece si la señal real es grabada a bajos niveles respecto al fondo de escala ($0 \text{ dB}_{FS}$):</p>
                 <div class="formula-box">SQNR_real = (6 · N) + S</div>
-                <p><strong>Ejemplo práctico:</strong> Una señal grabada a -18 dBFS en 16 bits poseerá una relación señal/ruido real de solo $96 + (-18) = 72 \text{ dB}$. Al amplificar luego esa señal por software, se elevará también el piso del ruido de cuantización.</p>
+                <p>Donde $S$ representa la amplitud efectiva de grabación expresada como valor negativo. Si grabás a -18 dBFS con 16 bits, la SQNR neta remanente cae a solo $96 - 18 = 72 \text{ dB}$. Al amplificar por software posteriormente, elevarás también ese ruido de cuantización fijado.</p>
             </div>
-            <div class="meta-source"><span>Ref: Cap 5.9.3 - Amplitud Efectiva</span></div>
         </div>
 
-        <div class="card" data-cat="codificacion">
-            <div class="card-tag tag-cod">UNQ Cap. 5</div>
-            <h2 class="card-title">Cuantización No-Uniforme (Leyes Mu-Law y A-Law)</h2>
+        <div class="card full-intent" data-view="full" data-category="audio">
+            <div class="card-tag tag-audio">Bibliografía · UNQ Cap 5</div>
+            <h2 class="card-title">Cuantización No Uniforme (Leyes Mu-Law y A-Law)</h2>
             <div class="card-body">
-                <p>Desarrollada históricamente para telecomunicaciones y compresión. No utiliza una separación de escalones constante. En su lugar, emplea una grilla logarítmica de distribución de niveles:</p>
+                <p>Variante algorítmica enfocada históricamente en optimizar el ancho de banda en los sistemas de telecomunicaciones y compresión de audio:</p>
                 <ul>
-                    <li><strong>Zonas Bajas:</strong> Mayor densidad de escalones (máxima resolución) cerca del cero analógico para capturar detalles finos y voz hablada.</li>
-                    <li><strong>Zonas Altas:</strong> Escalones más anchos y menor resolución para los valores de amplitud extremos o picos de señal.</li>
+                    <li><strong>Mecanismo:</strong> Los escalones de la grilla de cuantización no guardan distancias lineales constantes. Siguen una distribución logarítmica.</li>
+                    <li><strong>Estrategia:</strong> Asigna una mayor densidad de bits y máxima resolución para representar fielmente los voltajes pequeños y sutiles cercanos a cero. Deja escalones más toscos y menor resolución para los picos máximos de señal, adaptándose mejor a la respuesta del oído y a la voz humana.</li>
                 </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 5.9.4 - Cuantización No Lineal</span></div>
         </div>
 
-        <div class="card" data-cat="procesamiento">
-            <div class="card-tag tag-proc">UNQ Cap. 8</div>
-            <h2 class="card-title">Modificación de la Frecuencia de Muestreo</h2>
+        <div class="card full-intent" data-view="full" data-category="filtros">
+            <div class="card-tag tag-filtros">Bibliografía · Basso Cap 11</div>
+            <h2 class="card-title">Aplicaciones de Filtros y Preénfasis Analógico</h2>
             <div class="card-body">
-                <p>El texto de la UNQ describe los procesos obligatorios para convertir la tasa de muestreo de un archivo de audio existente, requiriendo algoritmos matemáticos severos:</p>
+                <p>Campos operativos descritos por Basso más allá de la ecualización creativa:</p>
                 <ul>
-                    <li><strong>Downsampling (Diezmación):</strong> Reducir la tasa de muestreo. Exige aplicar obligatoriamente un filtro digital pasa-bajos *antes* de descartar muestras, eliminando las frecuencias altas que causarían aliasing digital en la nueva tasa menor.</li>
-                    <li><strong>Upsampling (Interpolación):</strong> Aumentar la tasa. Inserta muestras en cero entre las muestras reales y luego aplica un filtro digital para calcular de forma fluida los valores intermedios.</li>
+                    <li><strong>Preénfasis / Desénfasis:</strong> Filtros obligatorios en la grabación analógica sobre cintas magnéticas o discos de vinilo clásicos (Curva RIAA). Sirven para compensar deficiencias físicas del soporte realzando ciertas frecuencias al grabar y atenuándolas de forma simétrica al reproducir, mitigando el siseo residual.</li>
+                    <li><strong>Divisores de Frecuencia (Crossovers):</strong> Redes de filtrado pasivo o activo destinadas a segmentar el espectro de potencia en sub-bandas para excitar por separado los parlantes (Tweeters, Woofers) de gabinetes multivía.</li>
                 </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 8.2 - Cambio de Formatos</span></div>
         </div>
 
-        <div class="card" data-cat="procesamiento">
-            <div class="card-tag tag-proc">UNQ Cap. 8</div>
-            <h2 class="card-title">El Proceso de Mezcla Digital (Sumación)</h2>
-            <div class="card-body">
-                <p>La combinación o mezcla de dos o más canales de audio digital independientes dentro de un entorno multipistas (como REAPER) se realiza de forma estrictamente matemática mediante la **adición lineal término a término** de los valores numéricos de las muestras en el mismo instante temporal:</p>
-                <div class="formula-box">y[n] = x_1[n] + x_2[n] + ... + x_m[n]</div>
-                <p><strong>Riesgo de Saturación (Clipping):</strong> Si la suma de las amplitudes supera el rango de representación binaria máximo permitido (ej. $+1.0$ o $-1.0$ en punto flotante, o los límites enteros), ocurre un truncamiento abrupto de la onda generando distorsión armónica grave.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 8.3 - Mezcla de Señales</span></div>
-        </div>
-
-        <div class="card" data-cat="procesamiento">
-            <div class="card-tag tag-proc">UNQ Cap. 8</div>
-            <h2 class="card-title">Procesamiento de Amplitud y Ganancia</h2>
-            <div class="card-body">
-                <p>Alterar el volumen o nivel de una señal digital implica multiplicar cada una de las muestras individuales ($x[n]$) de forma consecutiva por un factor escalar de ganancia constante ($g$):</p>
-                <div class="formula-box">y[n] = g · x[n]</div>
-                <ul>
-                    <li>Si $g > 1$, la señal se amplifica en nivel.</li>
-                    <li>Si $0 \le g < 1$, la señal sufre una atenuación.</li>
-                    <li>Si $g$ cambia dinámicamente muestra a muestra siguiendo una curva suave, se produce un proceso de **envolvente de amplitud** (Fades, Crossfades o Automatizaciones).</li>
-                </ul>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 8.4 - Control de Ganancia</span></div>
-        </div>
-
-        <div class="card" data-cat="filtros">
-            <div class="card-tag tag-fil">Basso Cap. 11</div>
-            <h2 class="card-title">Definición General y Campos de Aplicación</h2>
-            <div class="card-body">
-                <p>Un filtro es un procesador de señal diseñado específicamente para modificar el **espectro de frecuencias** de una señal, acentuando o atenuando bandas particulares. El texto de Basso detalla usos clave en sistemas profesionales:</p>
-                <ul>
-                    <li><strong>Filtros de Entrada/Protección:</strong> Eliminan frecuencias subsónicas indeseadas o ruidos de ultra-alta frecuencia para preservar el headroom dinámico de los amplificadores.</li>
-                    <li><strong>Preénfasis / Desénfasis:</strong> Utilizado en grabaciones magnéticas de cinta o discos de vinilo (curva RIAA) para compensar debilidades físicas de transferencia.</li>
-                    <li><strong>Divisores de Frecuencia (Crossovers):</strong> Separan las componentes en bandas de graves, medios y agudos dentro de gabinetes acústicos multivía.</li>
-                </ul>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 11.1 - Introducción a Filtros</span></div>
-        </div>
-
-        <div class="card" data-cat="filtros">
-            <div class="card-tag tag-fil">Basso Cap. 11</div>
-            <h2 class="card-title">Frecuencia de Corte ($f_c$) y Atenuación Directa</h2>
-            <div class="card-body">
-                <p>La frecuencia de corte es el parámetro central que demarca el límite operativo de acción de un filtro. Por convención acústica e ingenieril internacional, se define formalmente como la frecuencia en la cual el filtro reduce la amplitud o la potencia de la señal a la mitad de su valor original.</p>
-                <div class="formula-box emerald-line">Atenuación en fc = -3 dB (o un factor de 0.707 de tensión)</div>
-                <p>Las regiones del filtro se dividen a partir de aquí en: <strong>Banda de paso</strong> (frecuencias sin alteración) y <strong>Banda de atenuación</strong> (frecuencias reducidas).</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 11.2 - Atenuación</span></div>
-        </div>
-
-        <div class="card" data-cat="filtros">
-            <div class="card-tag tag-fil">Basso Cap. 11</div>
-            <h2 class="card-title">Pendiente de Atenuación (Slope) y Polos</h2>
-            <div class="card-body">
-                <p>Determina la severidad o rapidez de la caída de ganancia una vez superada la frecuencia de corte ($f_c$). Se expresa en decibeles por octava (**dB/oct**). La rigidez de la pendiente depende del número de circuitos básicos o celdas de filtrado acopladas, denominadas **Polos**:</p>
-                <ul>
-                    <li><strong>Filtro de 1° Orden (1 Polo):</strong> Pendiente suave de <strong>6 dB/octava</strong>.</li>
-                    <li><strong>Filtro de 2° Orden (2 Polos):</strong> Pendiente estándar de <strong>12 dB/octava</strong>.</li>
-                    <li><strong>Filtros de Orden Superior (N Polos):</strong> Añaden progresivamente múltiplos de 6 dB/oct (18 dB/oct, 24 dB/oct, etc.), logrando cortes sumamente abruptos.</li>
-                </ul>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 11.2 - Orden de los Filtros</span></div>
-        </div>
-
-        <div class="card" data-cat="filtros">
-            <div class="card-tag tag-fil">Basso Cap. 11</div>
-            <h2 class="card-title">Clasificación de Filtros según Respuesta Invariante</h2>
-            <div class="card-body">
-                <p>Basso desglosa minuciosamente las cuatro respuestas en frecuencia ideales y comerciales fijas:</p>
-                <ul>
-                    <li><strong>Pasa-altos (High-Pass / HPF):</strong> Deja pasar frecuencias altas, atenúa graves por debajo de $f_c$.</li>
-                    <li><strong>Pasa-bajos (Low-Pass / LPF):</strong> Deja pasar frecuencias bajas, atenúa agudos por encima de $f_c$.</li>
-                    <li><strong>Pasa-banda (Band-Pass / BPF):</strong> Permite el paso de una porción limitada del espectro delimitada por dos frecuencias de corte (inferior y superior).</li>
-                    <li><strong>Elimina-banda (Band-Reject / Rechazo de Banda):</strong> Atenúa fuertemente una banda específica, dejando intactos los extremos.</li>
-                </ul>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 11.2 - Clasificación</span></div>
-        </div>
-
-        <div class="card" data-cat="filtros">
-            <div class="card-tag tag-fil">Basso Cap. 11</div>
-            <h2 class="card-title">Ancho de Banda ($\Delta f$) y Factor de Calidad ($Q$)</h2>
-            <div class="card-body">
-                <p>En filtros sintonizables (Pasa-banda o de Campana), el **Ancho de Banda ($\Delta f$)** es la diferencia aritmética entre las frecuencias de corte superior ($f_2$) e inferior ($f_1$) donde la respuesta cae -3 dB: $\Delta f = f_2 - f_1$.</p>
-                <p>El **Factor de Calidad ($Q$)** define la selectividad o agudeza del filtro relacionando la frecuencia central ($f_0$) con dicho ancho de banda:</p>
-                <div class="formula-box emerald-line">Q = f_0 / Δf</div>
-                <p>Un valor de $Q$ elevado indica un filtro muy estrecho y selectivo; un $Q$ bajo representa una acción de afección espectral amplia y quirúrgicamente suave.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 11.3 - Parámetros de Banda</span></div>
-        </div>
-
-        <div class="card" data-cat="filtros">
-            <div class="card-tag tag-fil">Basso Cap. 11</div>
+        <div class="card full-intent" data-view="full" data-category="filtros">
+            <div class="card-tag tag-filtros">Bibliografía · Basso Cap 11</div>
             <h2 class="card-title">Filtros de Rechazo Puntual (Notch Filters)</h2>
             <div class="card-body">
-                <p>Es un caso extremo de filtro elimina-banda diseñado para poseer un Factor de Calidad ($Q$) extraordinariamente alto, lo que resulta en un ancho de banda sumamente estrecho.</p>
-                <p>Su aplicación principal en sistemas de audio profesional consiste en eliminar frecuencias parásitas sumamente localizadas y aisladas (como el zumbido por inducción de líneas eléctricas de 50 Hz o 60 Hz) sin alterar el resto de las frecuencias musicales adyacentes.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 11.3 - Filtro Notch</span></div>
-        </div>
-
-        <div class="card" data-cat="filtros">
-            <div class="card-tag tag-fil">Basso Cap. 11</div>
-            <h2 class="card-title">Ecualizadores Gráficos e Instrumentación</h2>
-            <div class="card-body">
-                <p>Un ecualizador gráfico está constituido por un banco de filtros pasa-banda fijos dispuestos en paralelo que cubren el espectro audible. Sus controles deslizantes alteran la ganancia de cada banda.</p>
-                <p>Basso especifica parámetros de laboratorio críticos para su medición:</p>
+                <p>Un caso de diseño extremo dentro de los filtros elimina-banda:</p>
                 <ul>
-                    <li>Impedancia de entrada/salida y distorsión armónica total (THD).</li>
-                    <li><strong>Comportamiento del Ruido:</strong> La relación Señal/Ruido se debe certificar en varias posiciones de los faders (todo en 0 dB, todo en -12 dB y todo en +12 dB). El nivel de ruido intrínseco suele ser considerablemente **menor** cuando los controles se sitúan planos en 0 dB.</li>
+                    <li><strong>Diseño:</strong> Cuenta con un Factor de Calidad (Q) extraordinariamente elevado, estrechando el ancho de banda operativo a rangos quirúrgicos mínimos.</li>
+                    <li><strong>Función:</strong> Su aplicación primordial en ingeniería de sonido es extirpar de raíz frecuencias espurias puntuales (por ejemplo, el zumbido inducido por redes eléctricas a 50 Hz o 60 Hz) sin comprometer de ninguna manera la respuesta armónica de los instrumentos musicales adyacentes.</li>
                 </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 11.7 - Ecualizadores Gráficos</span></div>
         </div>
 
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 16</div>
-            <h2 class="card-title">Filosofía de Procesadores de Efectos</h2>
+        <div class="card full-intent" data-view="full" data-category="delays">
+            <div class="card-tag tag-delays">Bibliografía · Basso Cap 16</div>
+            <h2 class="card-title">Conexión de Procesadores: Serie (Insert) vs. Paralelo (Aux)</h2>
             <div class="card-body">
-                <p>Basso establece una división conceptual estricta sobre cómo interactúa un procesador con la señal de audio:</p>
+                <p>Dicotomía de ruteo de señales dentro de consolas analógicas y virtuales:</p>
                 <ul>
-                    <li><strong>Procesadores de Inserción (En Serie):</strong> Se colocan interrumpiendo el canal físico. Tratan la **totalidad** del flujo de la señal que ingresa (ejemplo clásico: un compresor o un ecualizador principal).</li>
-                    <li><strong>Procesadores de Efectos (En Paralelo):</strong> La señal original se divide. Una porción limpia se mantiene intacta (**Señal Seca / Dry**), mientras otra porción es derivada a un bus auxiliar hacia el efecto, mezclándose a la salida solo una cantidad regulada de señal procesada (**Señal Húmeda / Wet**). Aportan espacio, tiempo y dimensionalidad.</li>
+                    <li><strong>Efectos en Serie (Inserción):</strong> Interrumpen por completo el canal físico. Tratan el 100% del flujo de la señal que cruza el bloque procesador. Configuración nativa para Ecualizadores y Compresores dinámicos.</li>
+                    <li><strong>Efectos en Paralelo (Envío Auxiliar):</strong> La señal limpia se divide en dos caminos. Un camino va directo a la mezcla sin alteraciones (Señal Seca / Dry). La derivación secundaria alimenta un bus auxiliar hacia el efecto, mezclando a la salida una dosis regulada de audio procesado (Señal Húmeda / Wet). Configuración obligatoria para Delays y Reverberaciones.</li>
                 </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 16.1 y 16.2 - Estructuras de Conexión</span></div>
         </div>
 
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 16</div>
-            <h2 class="card-title">Líneas de Delay: Bloque Constructivo Temporal</h2>
+        <div class="card full-intent" data-view="full" data-category="delays">
+            <div class="card-tag tag-delays">Bibliografía · Basso Cap 18</div>
+            <h2 class="card-title">Retardo Largo: El Fenómeno del Eco Discreto</h2>
             <div class="card-body">
-                <p>El retraso temporal es el átomo operativo de los efectos de tiempo. Físicamente, el sistema retiene muestras de la señal de entrada en buffers y las reproduce desfasadas en el tiempo.</p>
-                <p>Los parámetros indispensables para gobernar cualquier algoritmo de delay son:</p>
+                <p>Comportamiento cuando la línea de delay opera por encima del umbral de integración neuroacústica:</p>
                 <ul>
-                    <li><strong>Delay Time (Tiempo de retraso):</strong> Medido en milisegundos (ms), define la separación temporal.</li>
-                    <li><strong>Feedback (Realimentación):</strong> Envía una fracción regulada de la señal retrasada de salida de nuevo a la entrada. Multiplica el número de repeticiones de eco.</li>
+                    <li><strong>Constante de Tiempo:</strong> Retardos de tiempo largos, parametrizados netamente <strong>por encima de los 40 ms - 50 ms</strong> de separación.</li>
+                    <li><strong>Percepción:</strong> El aparato auditivo humano pierde la capacidad de fusionar las señales en un único evento tímbrico. Se experimenta la audición nítida, cronológica y separada de dos o más repeticiones diferenciadas del estímulo original.</li>
                 </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 16.5 - Bloques de Efectos</span></div>
         </div>
 
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 17</div>
-            <h2 class="card-title">Efectos de Modulación: El Flanger</h2>
+        <div class="card full-intent" data-view="full" data-category="delays">
+            <div class="card-tag tag-delays">Bibliografía · Basso Cap 19</div>
+            <h2 class="card-title">Estructura Temporal de la Reverberación Acústica</h2>
             <div class="card-body">
-                <p>Efecto basado en el uso de líneas de retraso críticamente cortas combinadas con modulación periódica automatizada mediante un oscilador de baja frecuencia (LFO):</p>
-                <ul>
-                    <li><strong>Tiempos de Retraso estándar:</strong> Típicamente entre <strong>0.1 ms y 10 ms</strong>.</li>
-                    <li><strong>Operación:</strong> Al sumarse la señal limpia con la señal modulada a tan corto tiempo, se produce un patrón destructivo cíclico de interferencias armónicas conocido como **Filtro de Peine (Comb Filter)**. Al moverse el tiempo por el LFO, los picos y valles barren el espectro simulando un sonido de "jet" o "barrido espacial". Requiere niveles de Feedback considerables.</li>
-                </ul>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 17.2 - Flanger</span></div>
-        </div>
-
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 17</div>
-            <h2 class="card-title">Efectos de Modulación: El Chorus</h2>
-            <div class="card-body">
-                <p>El efecto Chorus emula acústicamente el comportamiento de un conjunto de músicos o cantantes interpretando de manera unísona una misma línea musical, donde existen inevitables desviaciones microscópicas accidentales de afinación y tiempo.</p>
-                <ul>
-                    <li><strong>Tiempos de Retraso estándar:</strong> Rangos intermedios entre <strong>15 ms y 35 ms</strong>.</li>
-                    <li><strong>Operación:</strong> Utiliza tiempos más largos que el flanger para evitar que el filtro de peine sea el protagonista. El LFO altera sutilmente el tiempo de delay, induciendo pequeñas variaciones de tono (Pitch shifting por efecto Doppler) que engrosan y dan tridimensionalidad al sonido.</li>
-                </ul>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 17.3 - Chorus</span></div>
-        </div>
-
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 18</div>
-            <h2 class="card-title">Eco y Delay de Tiempo Largo</h2>
-            <div class="card-body">
-                <p>Cuando la línea de retraso supera la barrera de integración del sistema auditivo humano, el cerebro ya no fusiona las señales en fase ni las percibe como alteración tímbrica o espacialización elemental.</p>
-                <ul>
-                    <li><strong>Tiempo operativo:</strong> Superior a los <strong>40 ms o 50 ms</strong> de retraso.</li>
-                    <li><strong>Fenómeno:</strong> Percepción neuroacústica clara y diferenciada de dos o más eventos sonoros idénticos e independientes separados de forma cronológica en el tiempo (Repeticiones discretas o Eco).</li>
-                </ul>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 18.1 - Efectos de Retraso Largo</span></div>
-        </div>
-
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 19</div>
-            <h2 class="card-title">Reverberación Acústica de Salas (Reverb)</h2>
-            <div class="card-body">
-                <p>La reverberación es el resultado macroscópico de billones de reflexiones de ondas mecánicas chocando contra los contornos de una habitación. El texto de Basso estructura el decaimiento de la energía acústica de una sala en tres etapas temporales sucesivas:</p>
+                <p>La respuesta al impulso de un recinto cerrado se desglosa en tres etapas cronológicas secuenciales de energía:</p>
                 <ol>
-                    <li><strong>Sonido Directo:</strong> La onda que viaja en línea recta desde la fuente al receptor sin chocar con ninguna superficie.</li>
-                    <li><strong>Reflexiones Tempranas (Early Reflections):</strong> Los primeros rebotes en paredes, techo y suelo. Definen los límites del tamaño geométrico espacial percibido de la sala.</li>
-                    <li><strong>Reverberación Tardía / Cola (Late Reverb):</strong> Reflexiones densas y difusas imposibles de discernir de forma individual, que decaen exponencialmente.</li>
+                    <li><strong>Sonido Directo:</strong> Vector de onda lineal que viaja sin obstrucciones desde el emisor al receptor. Provee información de la ubicación exacta de la fuente.</li>
+                    <li><strong>Reflexiones Tempranas (Early Reflections):</strong> Primeros rebotes discretos contra los contornos (piso, techo, muros). Aportan al cerebro los datos métricos de la geometría y tamaño de la habitación.</li>
+                    <li><strong>Reverberación Tardía o Cola (Late Reverb):</strong> Sopa densa, caótica y difusa de billones de rebotes que decaen exponencialmente de modo homogéneo.</li>
                 </ol>
             </div>
-            <div class="meta-source"><span>Ref: Cap 19.1 - Acústica de Ambientes</span></div>
         </div>
 
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 19</div>
-            <h2 class="card-title">El Tiempo de Reverberación ($T_{60}$)</h2>
+        <div class="card full-intent" data-view="full" data-category="delays">
+            <div class="card-tag tag-delays">Bibliografía · Basso Cap 19</div>
+            <h2 class="card-title">Tiempo de Reverberación Acústica ($T_{60}$)</h2>
             <div class="card-body">
-                <p>Es el parámetro acústico fundamental e internacional utilizado para cuantificar el comportamiento de una sala o de un algoritmo de reverb digital.</p>
-                <p>Se define formalmente como el tiempo cronológico en segundos necesario para que la densidad de energía de la reverberación difusa caiga exactamente **60 decibeles** por debajo del nivel inicial del sonido directo una vez que la fuente ha cesado su emisión.</p>
-            </div>
-            <div class="meta-source"><span>Ref: Cap 19.2 - Parámetro T60</span></div>
-        </div>
-
-        <div class="card" data-cat="estructuras">
-            <div class="card-tag tag-str">Basso Cap. 20</div>
-            <h2 class="card-title">Simulación de Reverb Digital Avanzada</h2>
-            <div class="card-body">
-                <p>Para emular digitalmente la complejidad de una sala sin desbordar el procesamiento, los procesadores de efectos avanzados recurren al acoplamiento de estructuras complejas de delays cortos en cascada:</p>
+                <p>Métrica fundamental estandarizada por Wallace Sabine para caracterizar recintos cerrados o algoritmos artificiales:</p>
                 <ul>
-                    <li><strong>Filtros Pasa-Todo (All-Pass Filters):</strong> Modifican las fases de las frecuencias sin alterar la respuesta de amplitud, incrementando radicalmente la densidad de ecos por segundo para simular la cola difusa.</li>
-                    <li><strong>Filtros de Peine con Realimentación (IIR Comb Filters):</strong> Generan la recurrencia periódica de reflexiones.</li>
+                    <li><strong>Definición:</strong> Es el lapso de tiempo cronológico expresado en segundos necesario para que el nivel de presión sonora de la cola difusa decaiga exactamente <strong>60 decibeles (dB)</strong> por debajo del nivel de excitación del sonido directo una vez interrumpida la emisión de la fuente.</li>
                 </ul>
             </div>
-            <div class="meta-source"><span>Ref: Cap 20.3 - Arquitectura Digital de Reverbs</span></div>
+        </div>
+
+        <div class="card full-intent" data-view="full" data-category="delays">
+            <div class="card-tag tag-delays">Bibliografía · Basso Cap 20</div>
+            <h2 class="card-title">Simulación de Reverb: Filtros All-Pass y Peine IIR</h2>
+            <div class="card-body">
+                <p>Estrategia computacional descrita por Basso para emular ambientes complejos acoplando delays sin reventar la capacidad de cómputo del procesador DSP:</p>
+                <ul>
+                    <li><strong>Filtros de Peine con Realimentación (IIR Comb Filters):</strong> Estructuras recursivas destinadas a modelar el espaciado y la periodicidad de las reflexiones acústicas base.</li>
+                    <li><strong>Filtros Pasa-Todo (All-Pass Filters):</strong> Celdas cuya respuesta en frecuencia es plana (magnitud unitaria), pero que alteran drásticamente las fases. Sirven para multiplicar exponencialmente la densidad de ecos por segundo, logrando simular el comportamiento suave y difuso de una cola de reverberación real sin coloración tímbrica indeseada.</li>
+                </ul>
+            </div>
         </div>
 
     </main>
 
     <script>
-        function filterData(category) {
-            // Manejo estético de los botones de filtrado
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        // Estado de filtrado de la app global
+        let currentMode = 'exam';
+        let currentCat = 'all';
 
-            // Filtrado lógico de los nodos de tarjetas
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Render de botones de modo
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
+
+            renderGrid();
+        }
+
+        function filterCategory(cat) {
+            currentCat = cat;
+
+            // Render de botones de categoría
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.cat-btn[data-cat="${cat}"]`).classList.add('active');
+
+            renderGrid();
+        }
+
+        function renderGrid() {
             const cards = document.querySelectorAll('.card');
+            
             cards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-cat') === category) {
+                const cardView = card.getAttribute('data-view');
+                const cardCat = card.getAttribute('data-category');
+
+                // Lógica combinada de visibilidad
+                const matchesMode = (cardView === currentMode);
+                const matchesCat = (currentCat === 'all' || cardCat === currentCat);
+
+                if (matchesMode && matchesCat) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
             });
         }
+
+        // Ejecución inicial para setear pantalla de arranque
+        document.addEventListener("DOMContentLoaded", function() {
+            renderGrid();
+        });
     </script>
 </body>
 </html>
