@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Estudio: Audio Digital y Acústica - UNQ</title>
+    <style>
+        :root {
+            --bg-main: #060913;
+            --bg-card: #0f1524;
+            --border: #1e293b;
+            --cyan: #06b6d4;
+            --emerald: #10b981;
+            --text-light: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .hub-container {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        /* Línea superior estética tipo hardware */
+        .hub-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--cyan), var(--emerald));
+            border-radius: 20px 20px 0 0;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        header h1 span {
+            color: var(--cyan);
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            margin-bottom: 40px;
+        }
+
+        .menu-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Estilizado de los enlaces para que funcionen y parezcan botones */
+        .btn-nav {
+            display: block;
+            text-decoration: none;
+            padding: 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Botón de Teoría (Azul Cian) */
+        .btn-theory {
+            background-color: transparent;
+            color: var(--cyan);
+            border: 2px solid var(--cyan);
+        }
+
+        .btn-theory:hover {
+            background-color: rgba(6, 182, 212, 0.1);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Botón de Cuestionario (Verde Esmeralda) */
+        .btn-quiz {
+            background-color: var(--emerald);
+            color: #020617;
+            border: 2px solid var(--emerald);
+        }
+
+        .btn-quiz:hover {
+            background-color: #059669;
+            border-color: #059669;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container">
+        <header>
+            <h1>Plataforma de <span>Estudio</span></h1>
+            <p>Ejes Técnicos de Procesamiento de Sonido — UNQ</p>
+        </header>
+
+        <div class="menu-actions">
+            <a href="teoria.html" class="btn-nav btn-theory">Teoría</a>
+
+            <a href="cuestionario.html" class="btn-nav btn-quiz">Cuestionario</a>
+        </div>
+
+        <footer>
+            <p>Tecnicatura en Creación Musical</p>
+        </footer>
+    </div>
+
+</body>
+</html>
