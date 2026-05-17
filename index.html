@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Lab: Dashboard de Estudio & Gamificación UNQ</title>
+    <title>Compendio Teórico de Audio Digital y Procesamiento - UNQ</title>
     <style>
         :root {
-            --bg-main: #0a0e17;
-            --bg-card: #121826;
-            --bg-card-back: #1a233a;
-            --border: #202b42;
-            --text-light: #f1f5f9;
-            --text-muted: #94a3b8;
-            --cyan: #06b6d4;
-            --emerald: #10b981;
-            --rose: #f43f5e;
-            --amber: #f59e0b;
+            --bg-main: #090d16;
+            --bg-surface: #111827;
+            --bg-code: #1f2937;
+            --border: #2d3748;
+            --accent-blue: #38bdf8;
+            --accent-green: #34d399;
+            --accent-amber: #fbbf24;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
 
         * {
@@ -27,697 +26,332 @@
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-main);
-            color: var(--text-light);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
-            max-width: 800px;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 30px;
         }
 
         header h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            font-size: 2.5rem;
+            color: var(--accent-blue);
             margin-bottom: 10px;
-        }
-
-        header h1 span {
-            color: var(--cyan);
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 1.1rem;
         }
 
-        /* Sistema de Navegación por Pestañas Principales */
-        .nav-container {
-            display: flex;
-            background-color: #0f1422;
-            padding: 6px;
-            border-radius: 10px;
+        .nav-summary {
+            background-color: var(--bg-surface);
             border: 1px solid var(--border);
-            margin-bottom: 25px;
-            gap: 5px;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            padding: 12px 24px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn:hover {
-            color: var(--text-light);
-        }
-
-        .nav-btn.active {
-            background-color: var(--cyan);
-            color: #000;
-            box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
-        }
-
-        /* Contenedores de Vista */
-        .tab-content {
-            display: none;
-            width: 100%;
-            max-width: 1200px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* --- ESTILOS DE VISTA 1: FLASHCARDS --- */
-        .filter-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-btn {
-            background-color: #151d30;
-            border: 1px solid var(--border);
-            color: var(--text-light);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .filter-btn.active {
-            border-color: var(--cyan);
-            color: var(--cyan);
-            background-color: #1a263f;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            perspective: 1000px; /* Necesario para el efecto 3D */
-        }
-
-        .flashcard {
-            height: 250px;
-            cursor: pointer;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .nav-summary h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--accent-amber);
+        }
+
+        .nav-summary ul {
+            list-style: none;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            gap: 8px;
         }
 
-        .card-front {
-            background-color: var(--bg-card);
-            justify-content: space-between;
+        .nav-summary a {
+            color: var(--accent-blue);
+            text-decoration: none;
         }
 
-        .card-back {
-            background-color: var(--bg-card-back);
-            transform: rotateY(180deg);
-            justify-content: flex-start;
-            overflow-y: auto;
+        .nav-summary a:hover {
+            text-decoration: underline;
         }
 
-        /* Bordes de color por categoría */
-        .flashcard[data-cat="audio"] .card-face { border-left: 4px solid var(--cyan); }
-        .flashcard[data-cat="filtros"] .card-face { border-left: 4px solid var(--emerald); }
-        .flashcard[data-cat="delays"] .card-face { border-left: 4px solid var(--rose); }
-
-        .card-tag {
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-        .tag-audio { color: var(--cyan); }
-        .tag-filtros { color: var(--emerald); }
-        .tag-delays { color: var(--rose); }
-
-        .card-front h3 {
-            font-size: 1.25rem;
-            color: var(--text-light);
-            margin-bottom: auto;
-            margin-top: 10px;
-        }
-
-        .card-front .click-hint {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-align: right;
-            font-style: italic;
-        }
-
-        .card-back h4 {
-            font-size: 1.05rem;
-            color: var(--text-light);
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 5px;
-        }
-
-        .card-back p, .card-back li {
-            font-size: 0.88rem;
-            line-height: 1.5;
-            color: #cbd5e1;
-            margin-bottom: 8px;
-        }
-        .card-back ul { padding-left: 15px; }
-
-        /* --- ESTILOS DE VISTA 2: CUESTIONARIO --- */
-        .quiz-container {
-            background-color: var(--bg-card);
+        section {
+            background-color: var(--bg-surface);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 30px;
-            max-width: 700px;
-            margin: 0 auto;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 40px;
         }
 
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            background-color: #0f1422;
-            height: 6px;
-            border-radius: 3px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: var(--amber);
-            transition: width 0.3s ease;
-        }
-
-        .score-counter {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--amber);
-        }
-
-        .question-box {
-            min-height: 120px;
-            display: flex;
-            align-items: center;
+        h2.section-title {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
             margin-bottom: 25px;
-        }
-
-        .question-text {
-            font-size: 1.15rem;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .quiz-actions {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
             display: flex;
-            gap: 15px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--accent-green);
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #e5e7eb;
+            text-align: justify;
+        }
+
+        ul, ol {
             margin-bottom: 20px;
+            padding-left: 25px;
         }
 
-        .btn-choice {
-            flex: 1;
-            border: none;
+        li {
+            margin-bottom: 8px;
+            color: #e5e7eb;
+        }
+
+        strong {
+            color: #ffffff;
+        }
+
+        .formula-box {
+            background-color: var(--bg-code);
+            border-left: 4px solid var(--accent-amber);
             padding: 15px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #000;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            margin: 20px 0;
+            color: var(--accent-amber);
+            font-size: 1.05rem;
+            text-align: center;
         }
 
-        .btn-true { background-color: var(--emerald); }
-        .btn-true:hover { background-color: #059669; }
-        .btn-false { background-color: var(--rose); }
-        .btn-false:hover { background-color: #e11d48; }
-
-        .btn-choice:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .feedback-box {
-            display: none;
-            border-radius: 8px;
+        .exam-note {
+            background-color: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--accent-amber);
+            border-radius: 6px;
             padding: 15px;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            font-size: 0.9rem;
+            margin: 20px 0;
         }
 
-        .feedback-box.correct {
-            display: block;
-            background-color: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--emerald);
-            color: #a7f3d0;
+        .exam-note strong {
+            color: var(--accent-amber);
         }
 
-        .feedback-box.incorrect {
-            display: block;
-            background-color: rgba(244, 63, 94, 0.1);
-            border: 1px solid var(--rose);
-            color: #fecdd3;
-        }
-
-        .btn-next {
-            display: none;
+        table {
             width: 100%;
-            background-color: #1e293b;
-            color: var(--text-light);
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
             border: 1px solid var(--border);
             padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-code);
+            color: var(--accent-blue);
             font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
         }
-        .btn-next:hover { background-color: #334155; }
 
-        /* Pantalla de Resultados Finales */
-        .results-screen {
-            display: none;
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        footer {
             text-align: center;
-            padding: 20px 0;
-        }
-
-        .results-screen h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: var(--amber);
-        }
-
-        .results-score {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
-
-        .btn-restart {
-            background-color: var(--cyan);
-            color: #000;
-            border: none;
-            padding: 12px 24px;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 600px) {
-            .cards-grid { grid-template-columns: 1fr; }
-            .quiz-actions { flex-direction: column; }
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Audio Lab: <span>Simulador UNQ</span></h1>
-        <p>Entorno interactivo gamificado. Estudiá de forma rápida con las flashcards 3D y poné a prueba tus conocimientos reales con el simulador de examen.</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Ejes Teóricos de Examen</h1>
+            <p>Procesamiento de Sonido Digital y Acústica — Universidad Nacional de Quilmes</p>
+        </header>
 
-    <div class="nav-container">
-        <button class="nav-btn active" onclick="switchTab('study')">🎯 FLASHCARDS DE ESTUDIO</button>
-        <button class="nav-btn" onclick="switchTab('quiz')">🎮 SIMULADOR (VERDADERO/FALSO)</button>
+        <div class="nav-summary">
+            <h2>Índice de Módulos</h2>
+            <ul>
+                <li><a href="#modulo1">1. Codificación Digital de Sonido y Operaciones de Software</a></li>
+                <li><a href="#modulo2">2. Filtros, Ecualizadores y Redes Divisoras de Frecuencia</a></li>
+                <li><a href="#modulo3">3. Estructuras de Ruteo, Delay y Procesamiento Temporal</a></li>
+            </ul>
+        </div>
+
+        <section id="modulo1">
+            <h2 class="section-title">1. Codificación Digital y Operaciones de Software</h2>
+            
+            <h3>El Proceso de Digitalización</h3>
+            <p>La digitalización transforma una señal acústica continua en una representación numérica discreta mediante dos procesos ortogonales que actúan sobre ejes distintos:</p>
+            <ul>
+                <li><strong>Muestreo (Discretización Temporal):</strong> Consiste en tomar muestras periódicas de la amplitud de la señal a intervalos constantes de tiempo. Define el límite superior de frecuencias que el sistema puede registrar.</li>
+                <li><strong>Cuantización (Discretización en Amplitud):</strong> Proceso por el cual se asigna un valor numérico binario finito, extraído de una grilla predeterminada por la resolución en bits, a la amplitud de cada muestra.</li>
+            </ul>
+
+            <h3>Teorema de Nyquist-Shannon y Aliasing</h3>
+            <p>Para asegurar la reconstrucción exacta y unívoca de una señal continua a partir de sus muestras, la frecuencia de muestreo ($f_s$) debe cumplir estrictamente con la condición de ser mayor al doble de la frecuencia máxima componente de la señal analógica ($f_{max}$):</p>
+            <div class="formula-box">f_s > 2 · f_max</div>
+            <p>Si la señal de entrada contiene componentes sinusoidales que igualan o superan la mitad de la frecuencia de muestreo (conocida como <strong>Límite de Nyquist</strong>: $f_n = f_s / 2$), ocurre el fenómeno de <strong>Aliasing</strong> (o solapamiento). Las frecuencias que superan este límite se "reflejan" hacia el espectro audible como componentes inarmónicos falsos que no se encontraban en la señal original.</p>
+            
+            <div class="exam-note">
+                <strong>ALERTA DE EXAMEN (Filtro Antialias):</strong> Para evitar el aliasing de forma destructiva, es absolutamente obligatorio colocar un filtro pasa-bajo analógico de alta pendiente (filtro antialias) inmediatamente antes de la etapa de conversión Analógica-Digital (ADC), suprimiendo cualquier energía residual por encima del límite de Nyquist.
+            </div>
+
+            <h3>Métricas de Amplitud: SQNR</h3>
+            <p>La cuantización introduce inherentemente un <strong>error de cuantización</strong> (la diferencia infinitesimal entre la amplitud real analógica y el escalón discreto asignado). Este error se manifiesta acústicamente como un ruido blanco de fondo (ruido de cuantización).</p>
+            <p>La Relación Señal a Ruido de Cuantización ($SQNR$) teórica ideal para una cuantización lineal uniforme escala a razón de aproximadamente <strong>6 dB por cada bit de resolución</strong>. La fórmula general que determina la SQNR real de una señal digitalizada en función de su amplitud efectiva es:</p>
+            <div class="formula-box">SQNR = (6.02 · b) + Amplitud_efectiva (in dBfs)</div>
+            <p><em>Ejemplo del apunte:</em> Si se trabaja con una resolución de 16 bits ($6 \times 16 = 96$ dB de rango dinámico máximo) y la señal fue grabada con un nivel bajo de $-18$ dBfs, la relación señal a ruido resultante para ese pasaje específico será:</p>
+            <div class="formula-box">SQNR = 96 dB + (-18 dBfs) = 72 dB</div>
+            
+            <div class="exam-note">
+                <strong>CONSECUENCIA PRÁCTICA:</strong> Si los niveles de grabación originales son excesivamente bajos, la señal queda severamente degradada por el ruido de cuantización. Si posteriormente se intenta amplificar la pista mediante procesos digitales, el ruido de cuantización fijado se amplificará exactamente en la misma proporción.
+            </div>
+
+            <h3>Cuantización No Uniforme (Leyes de Compresión)</h3>
+            <p>En telecomunicaciones, con el fin de optimizar el ancho de banda sin perder inteligibilidad en la voz humana, se desarrollaron sistemas de cuantización no lineal bajo las normas <strong>Mu-Law ($\mu$-Law)</strong> y <strong>A-Law</strong>. </p>
+            <p>Estas técnicas aplican una grilla de cuantización variable: asignan una <strong>mayor densidad de niveles y resolución a los valores de amplitud cercanos a cero</strong> (donde reside la mayor parte de la información articulada de la voz) y una resolución mucho menor a las amplitudes elevadas o picos de señal maximizados.</p>
+
+            <h3>Manipulación de Formatos en Software</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operación</th>
+                        <th>Mecanismo Interno</th>
+                        <th>Impacto en el Audio y el Espectro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Remuestreo (Resample)</strong></td>
+                        <td>Recalcula por completo la posición temporal de todas las muestras para adaptarlas a una nueva grilla de muestreo.</td>
+                        <td>Altera de forma permanente el límite de Nyquist. Si se reduce la tasa (downsampling), es mandatorio aplicar un filtro pasa-bajo previo para evitar aliasing.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ajuste de Sample Rate (Adjust)</strong></td>
+                        <td>No modifica ningún dato numérico ni valor binario de las muestras. Solo altera el valor del metadato del encabezado que le indica al reloj a qué velocidad leer.</td>
+                        <td>Funciona exactamente igual a variar la velocidad de un motor en cinta abierta o tocadiscos: altera de manera conjunta y proporcional la duración temporal de la pista y su altura espectral (tono/pitch).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Recuantización (Cambio de Bits)</strong></td>
+                        <td>Modifica la longitud de palabra binaria de cada muestra (ej: de 24 bits a 16 bits para exportación comercial).</td>
+                        <td>Afecta el rango dinámico del archivo. Requiere la aplicación obligatoria de <strong>Dithering</strong> (ruido aleatorio no correlativo) para transformar la distorsión armónica no lineal de cuantización en siseo lineal.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mezcla Multipista (Mixdown)</strong></td>
+                        <td>Suma aritmética simple, muestra a muestra, de los canales involucrados en un mismo instante temporal.</td>
+                        <td>Un fader actúa multiplicando los valores por un escalar de ganancia; al unificar pistas en el bus master, la operación matemática pura es la <strong>suma</strong>.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="modulo2">
+            <h2 class="section-title">2. Filtros, Ecualizadores y Redes Divisoras de Frecuencia</h2>
+            
+            <h3>Definición de Filtro</h3>
+            <p>Un filtro es un procesador diseñado específicamente para modificar el contenido espectral de una señal de audio, introduciendo atenuación o realce en bandas de frecuencias seleccionadas.</p>
+
+            <h3>Clasificación Completa de Respuestas de Filtros</h3>
+            <ul>
+                <li><strong>Filtro Pasa-bajo (Low-pass Filter, LPF):</strong> Permite el libre paso de las componentes de frecuencia inferiores a la frecuencia de corte ($f_c$) y atenúa de forma progresiva a las frecuencias que se encuentran por encima de ella.</li>
+                <li><strong>Filtro Pasa-alto (High-pass Filter, HPF):</strong> Permite el libre paso de las frecuencias superiores a su frecuencia de corte e introduce atenuación a las inferiores. Es fundamental para remover componentes sub-graves espurios (soplidos mecánicos, ruidos de tráfico) que consumen margen dinámico (*headroom*).</li>
+                <li><strong>Filtro Pasa-banda (Band-pass Filter, BPF):</strong> Permite el paso exclusivo de un rango delimitado de frecuencias central, atenuando todas las componentes exteriores situadas tanto por debajo de la frecuencia de corte inferior como por encima de la superior.</li>
+                <li><strong>Filtro Rechaza-banda (Band-stop Filter):</strong> Introduce una atenuación en una banda central de frecuencias, permitiendo el paso sin alteraciones de los extremos inferiores y superiores del espectro.</li>
+                <li><strong>Filtro Notch (De Muesca):</strong> Es un caso extremo de filtro rechaza-banda diseñado con un **Factor de Calidad (Q) extraordinariamente elevado**, lo que resulta en un ancho de banda sumamente estrecho. Se utiliza quirúrgicamente para eliminar frecuencias contaminantes muy específicas (como el zumbido de inducción de línea de 50 o 60 Hz o retroalimentaciones acústicas) sin comprometer el timbre del resto de la señal.</li>
+                <li><strong>Filtro Pasa-todo (All-pass Filter):</strong> Mantiene una respuesta de amplitud completamente plana en todo el espectro (no atenúa ni realza ninguna frecuencia). Su función única es introducir un **desfase controlado en el eje temporal**. Es el bloque de construcción fundamental para efectos de modulación como el *Phaser* y algoritmos complejos de reverberación.</li>
+                <li><strong>Filtros Shelving (De Estantería):</strong> Realzan o atenúan de forma regular y uniforme todas las frecuencias a partir de una frecuencia de inflexión, estabilizándose en una meseta constante. Es el circuito típico de los potenciómetros fijos de graves y agudos en consolas analógicas estándar.</li>
+            </ul>
+
+            <h3>Redes Divisoras de Frecuencia (Crossover)</h3>
+            <p>Los crossovers fragmentan el espectro completo de una señal de audio en bandas de frecuencias específicas para alimentar correctamente a los altavoces especializados dentro de un gabinete multivía (tweeters, woofers, etc.).</p>
+            <ul>
+                <li><strong>Crossover Pasivo:</strong> Se conecta entre la salida del amplificador de potencia y los transductores. Maneja tensiones y corrientes muy elevadas, sufriendo pérdidas de energía en forma de calor y acoples de impedancia complejos.</li>
+                <li><strong>Crossover Activo:</strong> Se implementa en la cadena de audio <strong>antes de la etapa de amplificación de potencia</strong> (operando a niveles de línea). Divide la señal de forma precisa y limpia de manera previa a los amplificadores individuales.</li>
+            </ul>
+            
+            <div class="exam-note">
+                <strong>VENTAJAS DE LA BI/TRI-AMPLIFICACIÓN ACTIVA:</strong> 
+                1. Optimiza de manera absoluta la distribución de potencia eléctrica total del sistema.<br>
+                2. Reduce drásticamente la distorsión por intermodulación en las etapas de salida.<br>
+                3. Permite que cada amplificador trabaje exclusivamente dentro de las frecuencias para las cuales posee su mayor linealidad y rendimiento.
+            </div>
+
+            <h3>Sistemas de Ecualización</h3>
+            <p>Un ecualizador es un sistema compuesto por múltiples filtros combinados destinados al control del espectro:</p>
+            <ul>
+                <li><strong>Ecualizador Gráfico:</strong> Cuenta con una serie de bandas de frecuencias fijas distribuidas a intervalos geométricos regulares (ej: espaciadas por octava o 1/3 de octava). El usuario solo posee control sobre el nivel de realce o atenuación (Ganancia en dB) mediante faders verticales. Según detalla Basso, el ecualizador gráfico entrega su **menor índice de ruido intrínseco y alteraciones de fase cuando todos sus faders están planos en la posición central de 0 dB**.</li>
+                <li><strong>Ecualizador Paramétrico:</strong> Ofrece máxima flexibilidad operativa al permitir el control analógico o digital continuo e independiente de los tres parámetros rectores de cada banda de filtro:
+                    <ol>
+                        <li><strong>Frecuencia Central ($f_c$):</strong> El punto del espectro sobre el cual se centra la acción del filtro.</li>
+                        <li><strong>Ganancia:</strong> La cantidad de realce o atenuación en decibeles (dB).</li>
+                        <li><strong>Factor de Calidad (Q):</strong> Define la selectividad o ancho de banda ($\Delta f$) alrededor de la frecuencia central. Se calcula mediante la relación matemática $Q = f_c / \Delta f$. Un valor de Q alto implica una banda de acción muy estrecha y selectiva.</li>
+                    </ol>
+                </li>
+            </ul>
+        </section>
+
+        <section id="modulo3">
+            <h2 class="section-title">3. Estructuras de Ruteo, Delay y Procesamiento Temporal</h2>
+            
+            <h3>Ruteo de Señal: Inserción vs. Envío</h3>
+            <p>La forma en que se conecta un procesador a una estructura de mezcla define drásticamente su operación y el control de la señal:</p>
+            <ul>
+                <li><strong>Conexión en Serie (Inserción / Insert):</strong> El procesador se interpone de forma directa en el camino del canal, de modo que el **100% de la señal fluye obligatoriamente a través del dispositivo**. Es la estructura mandatoria para procesadores dinámicos (compresores, limitadores, compuertas de ruido) y procesadores espectrales quirúrgicos (ecualizadores), dado que se busca alterar la totalidad de la señal original.</li>
+                <li><strong>Conexión en Paralelo (Envío Auxiliar / Aux Send):</strong> La señal del canal se duplica y una copia controlada se envía a través de un bus independiente hacia la entrada del procesador. El procesador de efectos se configura internamente para entregar únicamente señal procesada (**100% húmeda / wet**). Posteriormente, esta salida regresa a un bus sumador de la consola para mezclarse con la señal original intacta (**seca / dry**). Es la estructura nativa para delays y reverberaciones.</li>
+            </ul>
+
+            <h3>El Retardo (Delay) como Unidad de Bloque Fundamental</h3>
+            <p>El delay es el componente primario a partir del cual se diseñan los efectos basados en el tiempo y la modulación. Retrasa una señal un tiempo ajustable ($T_D$). Su evolución tecnológica marca límites específicos:</p>
+            <ol>
+                <li><strong>Analógicos Mecánicos:</strong> Sistemas basados en la propagación de vibraciones a través de muelles (resortes) o placas metálicas. Presentan una coloración tímbrica inamovible condicionada por las resonancias físicas del material.</li>
+                <li><strong>De Cinta Magnética:</strong> Basados en grabadores de cinta abierta con cabezales físicos independientes para grabación y reproducción. El tiempo de delay mínimo está limitado estrictamente por la **distancia física mínima entre los cabezales de grabación y reproducción** junto con la velocidad de tracción de la cinta (típicamente no menos de ~50 ms).</li>
+                <li><strong>Digitales:</strong> Funcionan mediante la conversión A/D de la señal, la cual se escribe de manera secuencial en una **memoria RAM de almacenamiento cíclico** administrada por un puntero regido por un reloj. Un puntero de lectura recupera los datos una cantidad determinada de direcciones por detrás del puntero de escritura. Permite retardos milimétricos y precisos inferiores a una muestra sin degradación de la señal. Al alcanzar el límite físico de direcciones de memoria, el puntero vuelve automáticamente al inicio de la grilla, sobreescribiendo cíclicamente los datos más antiguos que ya fueron leídos.</li>
+            </ol>
+            <p><strong>Realimentación (Feedback):</strong> Consiste en tomar un porcentaje regulable de la señal retardada de salida e inyectarla nuevamente en el sumador de la entrada. Esto genera una sucesión periódica de ecos atenuados exponencialmente. Si el factor de realimentación iguala o supera la unidad, el sistema entra en oscilación descontrolada por saturación.</p>
+
+            <h3>Fenómenos Psicoacústicos: Efecto Haas (Precedencia)</h3>
+            <p>Si dos estímulos sonoros idénticos o muy similares llegan al sistema auditivo de un sujeto con un intervalo temporal comprendido dentro de un rango inferior a **30-40 milisegundos**, el cerebro fusiona ambos estímulos y los percibe como **un único evento sonoro unificado**.</p>
+            <p>La **localización espacial** de la fuente virtual resultante queda dictaminada en su totalidad por la dirección del estímulo acústico que arribó al oído en **primer lugar**. El segundo estímulo es ignorado en términos de dirección (aunque posea un nivel de amplitud levemente superior), aportando únicamente sensación de cuerpo, refuerzo y sonoridad.</p>
+
+            <h3>Efectos de Modulación por LFO (Delay Variable)</h3>
+            <p>Al aplicar un oscilador de baja frecuencia (LFO) para modular de forma continua y dinámica el tiempo de retardo ($T_D$) de un delay ultra-corto, se obtienen los siguientes efectos estándar:</p>
+            <ul>
+                <li><strong>Flanger:</strong> Utiliza tiempos de retardo sumamente cortos, comprendidos estrictamente entre **1 y 10 ms**. Al sumarse la señal modulada con la señal directa, se genera un patrón severo de filtrado de peine (*comb filter*) cuyas cancelaciones y realces armónicos se desplazan dinámicamente por el espectro. Emplea niveles de realimentación (feedback) elevados para acentuar las resonancias, logrando un timbre característico de carácter metálico o "jet".</li>
+                <li><strong>Chorus:</strong> Emplea tiempos de retardo intermedios ubicados entre **15 y 35 ms** (superando el umbral de cancelación del flanger pero dentro de la zona de integración de Haas). La variación temporal constante induce micro-desafinaciones en el tono por **efecto Doppler**. Al sumarse a la señal directa, emula el comportamiento de múltiples fuentes acústicas independientes interpretando en unísono la misma melodía, aportando modulación, densidad estéreo y amplitud tímbrica.</li>
+            </ul>
+        </section>
     </div>
 
-    <main id="view-study" class="tab-content active">
-        <div class="filter-bar">
-            <button class="filter-btn active" onclick="filterCards('all')">Todos los Temas</button>
-            <button class="filter-btn" onclick="filterCards('audio')">Audio Digital</button>
-            <button class="filter-btn" onclick="filterCards('filtros')">Filtros y EQ</button>
-            <button class="filter-btn" onclick="filterCards('delays')">Delays y Ruteo</button>
-        </div>
+    <footer>
+        <p>Material de estudio exclusivo estructurado para el programa de la Tecnicatura en Creación Musical — Universidad Nacional de Quilmes.</p>
+    </footer>
 
-        <div class="cards-grid">
-            
-            <div class="flashcard" data-cat="audio" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-audio">Audio Digital</span>
-                    <h3>Remuestreo (Resampling) vs. Ajuste de Sample Rate</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Procesos de Frecuencia de Muestreo</h4>
-                    <p><strong>Remuestreo (Resample):</strong> Recalcula matemáticamente los valores de las muestras. Si se baja la tasa (downsampling), exige un filtro pasabajos antialias para no generar aliasing.</p>
-                    <p><strong>Ajustar Sample Rate:</strong> Modifica la etiqueta de metadatos de velocidad sin tocar los datos binarios. Funciona igual que acelerar o retrasar una cinta o vinilo, alterando el tiempo y el tono.</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="audio" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-audio">Audio Digital</span>
-                    <h3>SQNR y Degradación en Amplitud</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Métricas y Dithering</h4>
-                    <p>La relación señal a ruido de cuantización ideal es de aprox. <strong>6 dB por cada bit</strong> ($SQNR \approx 6 \cdot b$).</p>
-                    <p>Si grabás a niveles muy bajos (ej. -18 dBFS), la SQNR real cae drásticamente. Al subir la ganancia digital más tarde, vas a levantar ese ruido de cuantización fijado.</p>
-                    <p><strong>Dithering:</strong> Ruido aleatorio sutil aplicado al bajar la profundidad de bits para convertir distorsión armónica en siseo continuo.</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="audio" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-audio">Audio Digital</span>
-                    <h3>Cuantización No Uniforme</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Leyes Mu-Law y A-Law</h4>
-                    <p>Es una cuantización no lineal usada en telecomunicaciones para optimizar el ancho de banda de la voz.</p>
-                    <p>Asigna <strong>mayor densidad de bits y resolución a amplitudes pequeñas</strong> cercanas a cero, y menor resolución a los picos de señal grandes, adaptándose mejor a la sensibilidad del oído humano.</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="filtros" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-filtros">Filtros</span>
-                    <h3>Filtros Quirúrgicos: Notch y Pasa-Todo</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Tipos de Filtro Avanzados</h4>
-                    <p><strong>Notch (Muesca):</strong> Filtro rechaza-banda con un factor de calidad (Q) extremadamente alto. Su ancho de banda es ultra-estrecho, diseñado para limpiar zumbidos de línea eléctrica (50/60 Hz) sin tocar frecuencias vecinas.</p>
-                    <p><strong>Pasa-Todo (All-Pass):</strong> Su respuesta en frecuencia es totalmente plana en amplitud (no atenúa nada). Su único fin es alterar las relaciones de fase en el tiempo. Base para Phasers y Reverbs.</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="filtros" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-filtros">Filtros</span>
-                    <h3>Crossover Activo vs. Pasivo</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Redes Divisoras de Frecuencia</h4>
-                    <p><strong>Crossover Pasivo:</strong> Se sitúa después del amplificador de potencia. Trabaja con altos voltajes y sufre pérdidas térmicas.</p>
-                    <p><strong>Crossover Activo:</strong> Se sitúa antes de la amplificación. Permite implementar <strong>Bi/Tri-amplificación activa</strong>, reduciendo la distorsión por intermodulación y permitiendo que cada amplificador trabaje eficientemente en su rango de frecuencia específico.</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="filtros" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-filtros">Filtros</span>
-                    <h3>EQ Gráfico vs. EQ Paramétrico</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Ecualizadores</h4>
-                    <p><strong>Gráfico:</strong> Bandas de frecuencias fijas por intervalos geométricos (ej: octava). El usuario solo controla la ganancia. <em>Nota de Basso:</em> El ruido intrínseco es menor con los controles planos en 0 dB.</p>
-                    <p><strong>Paramétrico:</strong> Control total, continuo e independiente sobre los tres parámetros clave por banda: Frecuencia Central ($f_c$), Ganancia (dB) y Factor Q (ancho de banda).</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="delays" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-delays">Delays y Ruteo</span>
-                    <h3>Efecto de Precedencia (Efecto Haas)</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Psicoacústica del Tiempo</h4>
-                    <p>Si dos sonidos idénticos llegan con una diferencia menor a <strong>30-40 ms</strong>, el cerebro los integra y percibe como un único evento sonoro.</p>
-                    <p>La localización espacial de la fuente queda determinada exclusivamente por el sonido que llega <strong>primero</strong>, ignorando la dirección del segundo aunque sea levemente más fuerte. Si pasa los 40 ms, se desintegra y se escucha un eco separado.</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="delays" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-delays">Delays y Ruteo</span>
-                    <h3>Delays Variables: Flanger vs. Chorus</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Modulación por LFO</h4>
-                    <p><strong>Flanger:</strong> Tiempos ultra cortos (1 a 10 ms). Genera un filtro de peine (comb filter) severo y móvil por desfases temporales. Usa realimentación (feedback) alta para dar sonido metálico.</p>
-                    <p><strong>Chorus:</strong> Tiempos intermedios (15 a 35 ms). El LFO introduce sutiles micro-desafinaciones (efecto Doppler) y diferencias de tiempo que emulan múltiples voces ejecutando en unísono, aportando amplitud estéreo.</p>
-                </div>
-            </div>
-
-            <div class="flashcard" data-cat="delays" onclick="flipCard(this)">
-                <div class="card-face card-front">
-                    <span class="card-tag tag-delays">Delays y Ruteo</span>
-                    <h3>Ruteo: Serie (Insert) vs. Paralelo (Aux)</h3>
-                    <span class="click-hint">Click para revelar de vuelta ↻</span>
-                </div>
-                <div class="card-face card-back">
-                    <h4>Estructuras de Conexión</h4>
-                    <p><strong>Serie (Inserción):</strong> El procesador intercepta y procesar el 100% de la señal del canal. Mandatorio para procesadores dinámicos y espectrales (Compresores, EQs, Gates).</p>
-                    <p><strong>Paralelo (Envío Auxiliar):</strong> Se duplica una copia de la señal (dry) mediante un bus auxiliar hacia el efecto configurado al 100% wet. Se suman a la salida. Mandatorio para delays y reverberaciones.</p>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <main id="view-quiz" class="tab-content">
-        <div class="quiz-container">
-            
-            <div id="quiz-gameplay">
-                <div class="quiz-header">
-                    <span id="quiz-question-number" style="font-weight: 600;">Pregunta 1 de 10</span>
-                    <span class="score-counter">Aciertos: <span id="quiz-score">0</span></span>
-                </div>
-                <div class="progress-bar-container">
-                    <div id="quiz-progress" class="progress-bar"></div>
-                </div>
-                <div class="question-box">
-                    <p id="quiz-text" class="question-text">Cargando pregunta...</p>
-                </div>
-                <div class="quiz-actions">
-                    <button class="btn-choice btn-true" onclick="answerQuestion(true)">VERDADERO</button>
-                    <button class="btn-choice btn-false" onclick="answerQuestion(false)">FALSO</button>
-                </div>
-                <div id="quiz-feedback" class="feedback-box"></div>
-                <button id="quiz-next-btn" class="btn-next" onclick="nextQuestion()">Siguiente Pregunta →</button>
-            </div>
-
-            <div id="quiz-results" class="results-screen">
-                <h2>¡Simulacro Finalizado!</h2>
-                <p>Tu puntuación es de:</p>
-                <div id="final-score-text" class="results-score">0 / 10</div>
-                <p id="results-comment" style="margin-bottom: 25px; color: var(--text-muted);"></p>
-                <button class="btn-restart" onclick="restartQuiz()">Reiniciar Simulador</button>
-            </div>
-
-        </div>
-    </main>
-
-    <script>
-        // --- LÓGICA DE NAVEGACIÓN DE PESTAÑAS ---
-        function switchTab(tabName) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            if (tabName === 'study') {
-                document.querySelector('.nav-btn:nth-child(1)').classList.add('active');
-                document.getElementById('view-study').classList.add('active');
-            } else {
-                document.querySelector('.nav-btn:nth-child(2)').classList.add('active');
-                document.getElementById('view-quiz').classList.add('active');
-                restartQuiz(); // Arranca fresco el juego cada vez que entra
-            }
-        }
-
-        // --- LÓGICA DE FLASHCARDS ---
-        function flipCard(cardElement) {
-            cardElement.classList.toggle('flipped');
-        }
-
-        function filterCards(cat) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            document.querySelectorAll('.flashcard').forEach(card => {
-                if (cat === 'all' || card.getAttribute('data-cat') === cat) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // --- BANCO DE PREGUNTAS DEL SIMULADOR (VERDADERO / FALSO) ---
-        const originalQuestions = [
-            {
-                text: "La operación de 'Ajustar Frecuencia de Muestreo' (Adjust Sample Rate) modifica la velocidad de lectura del archivo sin alterar matemáticamente los valores numéricos de las muestras.",
-                answer: true,
-                explanation: "¡Correcto! Solo cambia la metadata de reproducción. Si sube la tasa el audio dura menos y se vuelve agudo, como una cinta analógica acelerada."
-            },
-            {
-                text: "El filtro Notch es un diseño de filtro que se caracteriza por poseer un Factor de Calidad (Q) muy bajo y un ancho de banda sumamente amplio.",
-                answer: false,
-                explanation: "Falso. El filtro Notch posee un Factor Q extremadamente ALTO, lo que resulta en un ancho de banda ultra-estrecho (quirúrgico) para eliminar frecuencias específicas (como los 50 Hz)."
-            },
-            {
-                text: "El Efecto de Precedencia (o Efecto Haas) dictamina que el cerebro integra dos sonidos idénticos como uno solo siempre y cuando la diferencia temporal sea inferior a unos 30-40 ms.",
-                answer: true,
-                explanation: "¡Correcto! Dentro de ese umbral se percibe una sola fuente localizada en la dirección de la señal que llegó PRIMERO."
-            },
-            {
-                text: "Un filtro Pasa-Todo (All-Pass Filter) atenúa drásticamente las frecuencias agudas pero deja intactas las relaciones de fase de los componentes espectrales.",
-                answer: false,
-                explanation: "Falso. Un filtro Pasa-Todo tiene una respuesta en frecuencia completamente PLANA en amplitud (no atenúa nada); su única función es alterar las fases temporales."
-            },
-            {
-                text: "Según las especificaciones citadas por Basso, los ecualizadores gráficos suelen entregar su menor nivel de ruido intrínseco (propio) cuando todos sus controles están en la posición de 0 dB (planos).",
-                answer: true,
-                explanation: "¡Correcto! Modificar los potenciómetros hacia arriba o abajo incrementa el ruido de fondo y la coloración del circuito del ecualizador gráfico."
-            },
-            {
-                text: "El Dithering consiste en aplicar un filtro pasa-altos restrictivo justo después del proceso de remuestreo hacia abajo.",
-                answer: false,
-                explanation: "Falso. El Dithering consiste en añadir un ruido aleatorio de bajo nivel antes de reducir la resolución en bits (recuantización) para mitigar la distorsión no lineal por cuantización."
-            },
-            {
-                text: "El efecto de Flanger trabaja típicamente con retardos de tiempo variables comprendidos en un rango ultra corto de 1 a 10 milisegundos, produciendo un efecto de filtro de peine móvil.",
-                answer: true,
-                explanation: "¡Correcto! Debido a esos tiempos tan cortos, al sumarse con la señal directa genera cancelaciones extremas en forma de peine."
-            },
-            {
-                text: "En un sistema multipistas, mezclar varios canales de audio en un bus master se reduce aritméticamente a una multiplicación de los valores de las muestras instante a instante.",
-                answer: false,
-                explanation: "Falso. La mezcla equivale matemáticamente a una SUMA lineal término a término de los valores de las muestras. La multiplicación se usa para cambiar la ganancia o fader."
-            },
-            {
-                text: "Los crossovers activos se instalan antes de las etapas de amplificación de potencia, permitiendo el ruteo eficiente mediante bi o tri-amplificación.",
-                answer: true,
-                explanation: "¡Correcto! Al separar las bandas antes de potenciar la señal, se reduce la distorsión por intermodulación y se optimiza la energía eléctrica."
-            },
-            {
-                text: "La profundidad de bits define el eje del tiempo de la señal, mientras que la frecuencia de muestreo establece la resolución de la amplitud.",
-                answer: false,
-                explanation: "Falso. Es exactamente al revés: la frecuencia de muestreo gobierna el eje del TIEMPO (discretización temporal) y la profundidad de bits gobierna la AMPLITUD (cuantización)."
-            }
-        ];
-
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-
-        function restartQuiz() {
-            // Clonamos y barajamos preguntas para que no salgan siempre igual
-            questions = [...originalQuestions].sort(() => Math.random() - 0.5);
-            currentQuestionIndex = 0;
-            score = 0;
-            
-            document.getElementById('quiz-gameplay').style.display = 'block';
-            document.getElementById('quiz-results').style.display = 'none';
-            document.getElementById('quiz-score').innerText = '0';
-            
-            showQuestion();
-        }
-
-        function showQuestion() {
-            // Resetear UI de feedback
-            const feedbackBox = document.getElementById('quiz-feedback');
-            feedbackBox.style.display = 'none';
-            feedbackBox.className = 'feedback-box';
-            document.getElementById('quiz-next-btn').style.display = 'none';
-            
-            // Habilitar botones de respuesta
-            document.querySelectorAll('.btn-choice').forEach(btn => btn.disabled = false);
-
-            // Cargar datos
-            const q = questions[currentQuestionIndex];
-            document.getElementById('quiz-question-number').innerText = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
-            document.getElementById('quiz-text').innerText = q.text;
-            
-            // Actualizar barra de progreso
-            const progressPercent = (currentQuestionIndex / questions.length) * 100;
-            document.getElementById('quiz-progress').style.width = `${progressPercent}%`;
-        }
-
-        function answerQuestion(userChoice) {
-            // Deshabilitar botones para que no cambie la respuesta
-            document.querySelectorAll('.btn-choice').forEach(btn => btn.disabled = true);
-            
-            const q = questions[currentQuestionIndex];
-            const feedbackBox = document.getElementById('quiz-feedback');
-            
-            const isCorrect = (userChoice === q.answer);
-            if (isCorrect) {
-                score++;
-                document.getElementById('quiz-score').innerText = score;
-                feedbackBox.innerText = `¡Excelente! ` + q.explanation;
-                feedbackBox.classList.add('correct');
-            } else {
-                feedbackBox.innerText = `Incorrecto. ` + q.explanation;
-                feedbackBox.classList.add('incorrect');
-            }
-            
-            document.getElementById('quiz-next-btn').style.display = 'block';
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        }
-
-        function showResults() {
-            document.getElementById('quiz-gameplay').style.display = 'none';
-            document.getElementById('quiz-results').style.display = 'block';
-            
-            document.getElementById('final-score-text').innerText = `${score} / ${questions.length}`;
-            
-            const commentBox = document.getElementById('results-comment');
-            if (score === questions.length) {
-                commentBox.innerText = "¡Puntaje perfecto! Dominás al 100% la materia de audio digital, filtros y delays. Examen cocinado.";
-            } else if (score >= 7) {
-                commentBox.innerText = "¡Muy bien aprobado! Tenés conceptos claros y sólidos. Pegale una leída a las tarjetas que fallaste para asegurar el 10.";
-            } else {
-                commentBox.innerText = "Falta ajustar detalles técnicos. Te sugiero repasar a fondo las Flashcards de estudio prestando atención a los nombres y volver a intentar.";
-            }
-        }
-    </script>
 </body>
 </html>
