@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repaso para Audio Digital y Acústica - UNQ</title>
+    <title>Repaso de Teoría Musical</title>
     <style>
         :root {
-            --bg-main: #060913;
-            --bg-card: #0f1524;
-            --border: #1e293b;
-            --cyan: #06b6d4;
-            --emerald: #10b981;
-            --text-light: #f8fafc;
-            --text-muted: #64748b;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --accent-color: #16a085;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
         }
 
         * {
@@ -22,130 +21,362 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-light);
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
         }
 
-        .hub-container {
-            background-color: var(--bg-card);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 600px;
-            padding: 50px 40px;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            position: relative;
-        }
-
-        /* Línea superior estética tipo hardware */
-        .hub-container::before {
-            content: '';
-            position: absolute;
+        /* Navegación Lateral */
+        nav {
+            width: 280px;
+            height: 100vh;
+            background-color: var(--primary-color);
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--cyan), var(--emerald));
-            border-radius: 20px 20px 0 0;
+            overflow-y: auto;
+            padding: 20px 10px;
+        }
+
+        nav h2 {
+            color: #fff;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        nav a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+            padding-left: 20px;
+        }
+
+        /* Contenedor Principal */
+        main {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+            max-width: 1000px;
+        }
+
+        header {
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 20px;
         }
 
         header h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 10px;
-        }
-
-        header h1 span {
-            color: var(--cyan);
+            color: var(--primary-color);
+            font-size: 2.5rem;
         }
 
         header p {
-            color: #94a3b8;
-            font-size: 1.05rem;
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        /* Secciones y Tarjetas */
+        section {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+            scroll-margin-top: 20px;
         }
 
-        .menu-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
         }
 
-        /* Estilizado de los enlaces para que funcionen y parezcan botones */
-        .btn-nav {
-            display: block;
-            text-decoration: none;
-            padding: 20px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 12px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
         }
 
-        /* Botón de Teoría (Azul Cian) */
-        .btn-theory {
-            background-color: transparent;
-            color: var(--cyan);
-            border: 2px solid var(--cyan);
+        li {
+            margin-bottom: 8px;
         }
 
-        .btn-theory:hover {
-            background-color: rgba(6, 182, 212, 0.1);
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
-            transform: translateY(-3px);
+        /* Bloques de notas/destacados */
+        .highlight-box {
+            background-color: #e8f8f5;
+            border-left: 5px solid var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
         }
 
-        /* Botón de Cuestionario (Verde Esmeralda) */
-        .btn-quiz {
-            background-color: var(--emerald);
-            color: #020617;
-            border: 2px solid var(--emerald);
+        /* Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
 
-        .btn-quiz:hover {
-            background-color: #059669;
-            border-color: #059669;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-            transform: translateY(-3px);
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
         }
 
-        footer {
-            margin-top: 50px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        th {
+            background-color: #f8fafc;
+            color: var(--primary-color);
+        }
+
+        /* Código / Cifrados */
+        code {
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #c0392b;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="hub-container">
+    <nav>
+        <h2>Temario</h2>
+        <a href="#claves">1. Claves (G, F, C)</a>
+        <a href="#figuras">2. Figuras y Silencios</a>
+        <a href="#compas">3. Compás y Cifra</a>
+        <a href="#intervalos">4. Intervalos Simples</a>
+        <a href="#armaduras">5. Armaduras de Clave</a>
+        <a href="#escala-mayor">6. Escala Mayor y Grados</a>
+        <a href="#escalas-menores">7. Variantes Menores</a>
+        <a href="#triadas">8. Acordes Tríada</a>
+        <a href="#cifrado">9. Cifrado Americano</a>
+    </nav>
+
+    <main>
         <header>
-            <h1><span> Repaso para Audio Digital y Acústica </span></h1>
-            <p>Luca DJ, el unico que sabe mezclar el jugo Tang</p>
+            <h1>Resumen de Teoría Musical</h1>
+            <p>Guía de estudio rápido para preparación de examen</p>
         </header>
 
-        <div class="menu-actions">
-            <a href="teoria.html" class="btn-nav btn-theory">Teoría</a>
+        <!-- 1. CLAVES -->
+        <section id="claves">
+            <h2>1. Claves (G, F, C)</h2>
+            <p>Las claves se ubican al inicio del pentagrama e indican el nombre y la altura de las notas musicales según la línea en la que se posicionan.</p>
+            <br>
+            <ul>
+                <li><strong>Clave de Sol (G):</strong> Se ubica en la 2ª línea. Se utiliza para instrumentos agudos (guitarra, flauta, violín) y voces agudas.</li>
+                <li><strong>Clave de Fa (F):</strong> La más común se ubica en la 4ª línea (los dos puntos abrazan esta línea). Se utiliza para registros e instrumentos graves (bajo eléctrico, contrabajo, mano izquierda del piano).</li>
+                <li><strong>Clave de Do (C):</strong> Se sitúa en diversas líneas; las más habituales son en 3ª línea (viola) y 4ª línea (fagot, trombón). El centro del símbolo define la ubicación del Do central.</li>
+            </ul>
+        </section>
 
-            <a href="cuestionario.html" class="btn-nav btn-quiz">Cuestionario</a>
-        </div>
+        <!-- 2. FIGURAS Y SILENCIOS -->
+        <section id="figuras">
+            <h2>2. Figuras y Silencios</h2>
+            <p>Determinan la duración exacta de los sonidos y de sus pausas (silencios) correspondientes.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Figura</th>
+                        <th>Duración (en pulsos)</th>
+                        <th>Ubicación del Silencio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Redonda</strong></td>
+                        <td>4 tiempos</td>
+                        <td>Colgado de la 4ª línea hacia abajo.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blanca</strong></td>
+                        <td>2 tiempos</td>
+                        <td>Apoyado sobre la 3ª línea hacia arriba.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Negra</strong></td>
+                        <td>1 tiempo</td>
+                        <td>Símbolo único en el centro del pentagrama.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Corchea</strong></td>
+                        <td>1/2 tiempo</td>
+                        <td>Silencio con 1 gancho.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Semicorchea</strong></td>
+                        <td>1/4 tiempo</td>
+                        <td>Silencio con 2 ganchos.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="highlight-box">
+                <strong>El Puntillo:</strong> Punto que se añade a la derecha de la figura o silencio y le suma **la mitad de su valor original**. <br>
+                <em>Ejemplo:</em> Una Blanca con puntillo equivale a 3 tiempos (2 + 1).
+            </div>
+        </section>
 
-        <footer>
-            <p>Tecnicatura en Creación Musical</p>
-        </footer>
-    </div>
+        <!-- 3. COMPÁS Y CIFRA DE COMPÁS -->
+        <section id="compas">
+            <h2>3. Compás y Cifra de Compás</h2>
+            <p>El compás es la métrica musical que divide el tiempo en fragmentos regulares.</p>
+            <br>
+            <ul>
+                <li><strong>Número Superior (Numerador):</strong> Define la cantidad de tiempos (en compases simples) o la cantidad de subdivisiones (en compases compuestos) que entran por compás.</li>
+                <li><strong>Número Inferior (Denominador):</strong> Representa la figura que actúa como unidad de medida (1 = Redonda, 2 = Blanca, 4 = Negra, 8 = Corchea).</li>
+            </ul>
+            <br>
+            <h3>Tipos por su Subdivisión:</h3>
+            <ul>
+                <li><strong>Compases Simples (2/4, 3/4, 4/4):</strong> Poseen subdivisión binaria (el pulso se divide naturalmente en dos partes iguales). La unidad de pulso suele ser la negra.</li>
+                <li><strong>Compases Compuestos (6/8, 9/8, 12/8):</strong> Poseen subdivisión ternaria (el pulso se divide en tres partes iguales). La unidad de pulso es una figura con puntillo (como la negra con puntillo). El numerador indica la cantidad total de corcheas.</li>
+            </ul>
+        </section>
+
+        <!-- 4. INTERVALOS SIMPLES -->
+        <section id="intervalos">
+            <h2>4. Intervalos Simples</h2>
+            <p>Es la distancia tonal entre dos notas musicales que no supera la octava. Se clasifican por su número (distancia nominal) y su especie (cantidad de tonos y semitonos).</p>
+            <br>
+            <ul>
+                <li><strong>Justos (J):</strong> Se aplica únicamente a las 4ª (2 Tonos y 1 Semitono), 5ª (3 Tonos y 1 Semitono) y 8ª (5 Tonos y 2 Semitonos).</li>
+                <li><strong>Mayores (M) y Menores (m):</strong> Se aplica a las 2ª, 3ª, 6ª y 7ª. Las menores poseen un semitono menos que las mayores correspondientes.</li>
+                <li><strong>Aumentados (Aum):</strong> Un intervalo Mayor o Justo al que se le añade un semitono cromático.</li>
+                <li><strong>Disminuidos (Dis):</strong> Un intervalo Menor o Justo al que se le resta un semitono cromático.</li>
+            </ul>
+        </section>
+
+        <!-- 5. ARMADURAS DE CLAVE -->
+        <section id="armaduras">
+            <h2>5. Armadura de Clave: Tonalidades Mayores y Menores</h2>
+            <p>Grupo de alteraciones situadas al comienzo del pentagrama que establecen la tonalidad fija del tema musical.</p>
+            <br>
+            <ul>
+                <li><strong>Orden de Sostenidos (#):</strong> Fa - Do - Sol - Re - La - Mi - Si</li>
+                <li><strong>Orden de Bemoles (b):</strong> Si - Mi - La - Re - Sol - Do - Fa <em>(Es el orden inverso de los sostenidos)</em>.</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>Relativos Mayores y Menores:</strong> Cada armadura es compartida por una escala mayor y una menor. Para hallar la relativa menor de una escala mayor, se desciende una 3ª menor (1 tono y medio) o se busca directamente su <strong>VI grado</strong>.
+            </div>
+        </section>
+
+        <!-- 6. ESCALA MAYOR -->
+        <section id="escala-mayor">
+            <h2>6. Escala Mayor y Grados de la Escala</h2>
+            <p>La estructura interválica fija de la escala mayor es: <strong>Tono - Tono - Semitono - Tono - Tono - Tono - Semitono</strong>.</p>
+            <br>
+            <h3>Grados Pilares (Tonales):</h3>
+            <p>Son estructurales, estables y definen las funciones armónicas principales.</p>
+            <ul>
+                <li><strong>I (Tónica):</strong> Centro de reposo e identidad de la escala.</li>
+                <li><strong>IV (Subdominante):</strong> Tensión media o preparación.</li>
+                <li><strong>V (Dominante):</strong> Tensión máxima, dirección y atracción de resolución hacia la tónica.</li>
+            </ul>
+            <br>
+            <h3>Grados Secundarios (Modales):</h3>
+            <p>Definen el color armónico (modo mayor o menor).</p>
+            <ul>
+                <li><strong>II (Supertónica)</strong>, <strong>III (Mediante)</strong>, <strong>VI (Superdominante)</strong>.</li>
+                <li><strong>VII (Sensible):</strong> Ubicado a un semitono de la tónica (atracción fuerte). Se llama <em>Subtónica</em> si se encuentra a un tono completo de distancia.</li>
+            </ul>
+        </section>
+
+        <!-- 7. VARIANTES DE LA ESCALA MENOR -->
+        <section id="escalas-menores">
+            <h2>7. Variantes de la Escala Menor</h2>
+            <p>Las escalas menores modifican sus grados superiores (VI y VII) para resolver necesidades melódicas y de tensión armónica.</p>
+            <br>
+            <ol>
+                <li><strong>Menor Antigua (Natural):</strong> Estructura pura sin alteraciones accidentales adicionales (T - ST - T - T - ST - T - T). El VII grado es subtónica (a un tono de la tónica).</li>
+                <li><strong>Menor Armónica:</strong> Se eleva un semitono el <strong>VII grado</strong> tanto al ascender como al descender, convirtiéndolo en sensible artificial. Genera un salto de 2ª aumentada entre el VI y VII grado.</li>
+                <li><strong>Menor Melódica:</strong> Para suavizar el salto melódico, eleva un semitono el <strong>VI y el VII grado al ascender</strong>. Al <strong>descender, desarma las alteraciones</strong> regresando a su forma natural.</li>
+                <li><strong>Menor Bachiana:</strong> Eleva un semitono el <strong>VI y VII grado al ascender Y también los mantiene elevados al descender</strong>.</li>
+            </ol>
+        </section>
+
+        <!-- 8. ACORDES TRÍADA -->
+        <section id="triadas">
+            <h2>8. Acordes Tríada e Inversiones</h2>
+            <p>Un acorde tríada se conforma mediante la superposición de tres notas por intervalos de terceras: Fundamental (raíz), Tercera y Quinta.</p>
+            <br>
+            <ul>
+                <li><strong>Mayor:</strong> Tercera Mayor + Quinta Justa.</li>
+                <li><strong>Menor:</strong> Tercera Menor + Quinta Justa.</li>
+                <li><strong>Disminuido:</strong> Tercera Menor + Quinta Disminuida.</li>
+                <li><strong>Aumentado:</strong> Tercera Mayor + Quinta Aumentada.</li>
+            </ul>
+            <br>
+            <h3>Inversiones (Modificación de la nota del Bajo):</h3>
+            <ul>
+                <li><strong>Estado Fundamental:</strong> La Fundamental se sitúa en la nota más grave (el bajo).</li>
+                <li><strong>Primera Inversión:</strong> La Tercera se sitúa en el bajo.</li>
+                <li><strong>Segunda Inversión:</strong> La Quinta se sitúa en el bajo.</li>
+            </ul>
+        </section>
+
+        <!-- 9. CIFRADO AMERICANO -->
+        <section id="cifrado">
+            <h2>9. Cifrado Americano (Estado Fundamental e Inversiones)</h2>
+            <p>Reemplaza el nombre de las notas tradicionales por letras fijas del alfabeto:</p>
+            <p style="text-align: center; margin: 15px 0; font-size: 1.1rem;">
+                <strong>A</strong> = La | <strong>B</strong> = Si | <strong>C</strong> = Do | <strong>D</strong> = Re | <strong>E</strong> = Mi | <strong>F</strong> = Fa | <strong>G</strong> = Sol
+            </p>
+            
+            <h3>Calidad del Acorde en Cifrado:</h3>
+            <ul>
+                <li><strong>Mayor:</strong> Solo la letra de la nota fundamental. Ej: <code>C</code> (Do Mayor).</li>
+                <li><strong>Menor:</strong> Se le añade una "m" minúscula. Ej: <code>Cm</code> (Do Menor).</li>
+                <li><strong>Disminuido:</strong> Se añade "dim" o el símbolo "°". Ej: <code>Cdim</code> o <code>C°</code>.</li>
+                <li><strong>Aumentado:</strong> Se añade "aug" o el símbolo "+". Ej: <code>Caug</code> o <code>C+</code>.</li>
+            </ul>
+            <br>
+            <h3>Cifrado de Inversiones (Slash Chords):</h3>
+            <p>Se utiliza una barra diagonal (<code>/</code>). La primera letra indica el acorde armónico general y la letra a la derecha de la barra define <strong>la nota exacta que debe estar en el bajo</strong>.</p>
+            <br>
+            <ul>
+                <li><code>C</code> = Do Mayor en Estado Fundamental (Bajo en Do).</li>
+                <li><code>C/E</code> = Do Mayor en <strong>Primera Inversión</strong> (Bajo en Mi, que es su tercera).</li>
+                <li><code>C/G</code> = Do Mayor en <strong>Segunda Inversión</strong> (Bajo en Sol, que es su quinta).</li>
+                <li><code>Cm/Eb</code> = Do Menor en <strong>Primera Inversión</strong> (Bajo en Mi bemol).</li>
+            </ul>
+        </section>
+    </main>
 
 </body>
 </html>
